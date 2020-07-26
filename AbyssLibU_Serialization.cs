@@ -68,9 +68,9 @@ namespace AbyssLibU
 #pragma warning disable CA2235 // Mark all non-serializable fields
         private List<TKey> Keys;
 #pragma warning restore CA2235 // Mark all non-serializable fields
-                              /// <summary>
-                              /// Json文字列変換用（値）
-                              /// </summary>
+        /// <summary>
+        /// Json文字列変換用（値）
+        /// </summary>
         [SerializeField]
 #pragma warning disable CA2235 // Mark all non-serializable fields
         private List<TValue> Values;
