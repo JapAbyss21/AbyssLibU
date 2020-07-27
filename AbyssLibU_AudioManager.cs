@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -369,14 +370,7 @@ namespace AbyssLibU
         /// <returns>BGMが再生中の場合はtrueを、再生中でない場合はfalseを返します。</returns>
         public bool IsPlayingBGM()
         {
-            foreach (AudioSource bgmSource in _bgmSource)
-            {
-                if (bgmSource.isPlaying)
-                {
-                    return true;
-                }
-            }
-            return false;
+            return _bgmSource.Cast<AudioSource>().Any((e) => e.isPlaying);
         }
         //=================================================================================
         //SE
@@ -449,14 +443,7 @@ namespace AbyssLibU
         /// <returns>SEが再生中の場合はtrueを、再生中でない場合はfalseを返します。</returns>
         public bool IsPlayingSE()
         {
-            foreach (AudioSource seSource in _seSourceList)
-            {
-                if (seSource.isPlaying)
-                {
-                    return true;
-                }
-            }
-            return false;
+            return _seSourceList.Any((e) => e.isPlaying);
         }
     }
 

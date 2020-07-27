@@ -28,12 +28,11 @@ namespace AbyssLibU
             if (ta != null)
             {
                 LE.DoString(ta.text);
-                return;
             }
             // テキストデータとして、外部データからスクリプトファイルをロードする
-            using (StreamReader sr = new StreamReader(Application.dataPath + "/" + path, System.Text.Encoding.GetEncoding("UTF-8")))
+            else
             {
-                LE.DoString(sr.ReadToEnd());
+                LE.DoString(File.ReadAllText(Application.dataPath + "/" + path, System.Text.Encoding.GetEncoding("UTF-8")));
             }
         }
 
