@@ -58,6 +58,7 @@ namespace AbyssLibU
 
         /// <summary>
         /// 初期化処理です。
+        /// パスワードが未入力の場合、自動生成されます。
         /// </summary>
         private void Awake()
         {
@@ -70,6 +71,14 @@ namespace AbyssLibU
                 IV = string.IsNullOrEmpty(IVPassword) ? new Rfc2898DeriveBytes(IVPassword, DEFAULT_BLOCK_SIZE / 8).GetBytes(DEFAULT_BLOCK_SIZE / 8) : Convert.FromBase64String(IVPassword),
                 Key = string.IsNullOrEmpty(KeyPassword) ? new Rfc2898DeriveBytes(KeyPassword, DEFAULT_KEY_SIZE / 8).GetBytes(DEFAULT_KEY_SIZE / 8) : Convert.FromBase64String(KeyPassword)
             };
+            if (string.IsNullOrEmpty(IVPassword))
+            {
+                IVPassword = Convert.ToBase64String(CPS.IV);
+            }
+            if (string.IsNullOrEmpty(KeyPassword))
+            {
+                KeyPassword = Convert.ToBase64String(CPS.Key);
+            }
         }
 
         //=================================================================================

@@ -6,6 +6,7 @@ namespace AbyssLibU
 
     /// <summary>
     /// GameObjectクラスのオブジェクトプールです。
+    /// オブジェクトの返却時はSetActive(false)してください。
     /// </summary>
     public class GameObjectPool
     {
@@ -36,7 +37,7 @@ namespace AbyssLibU
 
         /// <summary>
         /// プール対象のオブジェクトを作成します。
-        /// 作成したオブジェクトは非アクティブです。
+        /// 作成したオブジェクトは非アクティブでまだプールされていません。
         /// </summary>
         /// <returns>インスタンスを返します。</returns>
         public GameObject CreateNewObject()
@@ -50,6 +51,7 @@ namespace AbyssLibU
         /// <summary>
         /// オブジェクトを取得します。
         /// 取得したオブジェクトはアクティブです。
+        /// オブジェクトの返却時はSetActive(false)してください。
         /// </summary>
         /// <returns>オブジェクトを返します。</returns>
         public GameObject GetObject()

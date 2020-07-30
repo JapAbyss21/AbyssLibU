@@ -46,7 +46,7 @@ namespace AbyssLibU
         //BGMのフェードにかかる時間
         public const float BGM_FADE_SPEED_LOW = 0.3f;
         public const float BGM_FADE_SPEED_HIGH = 0.9f;
-        private float _bgmFadeSpeed = BGM_FADE_SPEED_HIGH;
+        private float _bgmFadeSpeed = BGM_FADE_SPEED_LOW;
         //AudioSource
         private AudioSource[,] _bgmSource;
         private int _bgmSourceIterator = 0;

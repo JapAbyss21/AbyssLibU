@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace AbyssLibU
 {
@@ -85,7 +86,7 @@ namespace AbyssLibU
         {
             try
             {
-                GameObject.Find(name).GetComponent<UnityEngine.UI.Image>().sprite = sprite;
+                GameObject.Find(name).GetComponent<Image>().sprite = sprite;
             }
             catch (System.NullReferenceException)
             {
@@ -101,7 +102,7 @@ namespace AbyssLibU
         {
             try
             {
-                return GameObject.Find(name).GetComponent<UnityEngine.UI.Image>().GetComponent<RectTransform>();
+                return GameObject.Find(name).GetComponent<Image>().GetComponent<RectTransform>();
             }
             catch (System.NullReferenceException)
             {
@@ -120,18 +121,18 @@ namespace AbyssLibU
         /// </summary>
         /// <param name="name">プレハブ名を指定します。</param>
         /// <returns>Buttonクラスのインスタンスを返します。</returns>
-        public static UnityEngine.UI.Button Instantiate(string name)
+        public static Button Instantiate(string name)
         {
-            return Object.Instantiate(Resources.Load<UnityEngine.UI.Button>(name));
+            return Object.Instantiate(Resources.Load<Button>(name));
         }
         /// <summary>
         /// ButtonクラスからTextクラスを取得します。
         /// </summary>
         /// <param name="button">Buttonクラスを指定します。</param>
         /// <returns>Textクラスを返します。</returns>
-        public static UnityEngine.UI.Text GetButtonText(UnityEngine.UI.Button button)
+        public static Text GetButtonText(Button button)
         {
-            return button.GetComponentInChildren<UnityEngine.UI.Text>();
+            return button.GetComponentInChildren<Text>();
         }
     }
 
