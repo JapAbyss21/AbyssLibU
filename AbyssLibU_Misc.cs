@@ -19,15 +19,13 @@ namespace AbyssLibU
         /// <returns>Spriteクラスを返します。</returns>
         public static Sprite LoadResources(string path, Rect? rect = null, Vector2? pivot = null)
         {
-            Sprite result = Resources.Load<Sprite>(path);
-            if (result == null)
+            Texture2D texture = Resources.Load<Texture2D>(path);
+            if (texture == null)
             {
                 throw new FileNotFoundException("Could not find resource \"" + path + "\"");
             }
-            result = Sprite.Create(
-                result.texture, rect != null ? new Rect(rect.Value.x, result.texture.height - rect.Value.y - rect.Value.height, rect.Value.width, rect.Value.height) :
-                new Rect(0, 0, result.texture.width, result.texture.height), pivot ?? new Vector2(0.5f, 0.5f));
-            return result;
+            return Sprite.Create(texture, rect != null ? new Rect(rect.Value.x, texture.height - rect.Value.y - rect.Value.height, rect.Value.width, rect.Value.height) :
+                new Rect(0, 0, texture.width, texture.height), pivot ?? new Vector2(0.5f, 0.5f));
         }
         /// <summary>
         /// 外部データからテクスチャデータを読み込みます。
