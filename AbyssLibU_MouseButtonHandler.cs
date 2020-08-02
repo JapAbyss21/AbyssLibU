@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
@@ -13,8 +14,9 @@ namespace AbyssLibU
     [AddComponentMenu("Event/MouseButton")]
     public class AbyssLibU_MouseButtonHandler : MonoBehaviour, IPointerClickHandler
     {
-        [System.Serializable]
-        public class ButtonEvents : UnityEvent { }
+#pragma warning disable CA1034 // Nested types should not be visible
+        [Serializable]public class ButtonEvents : UnityEvent { }
+#pragma warning restore CA1034 // Nested types should not be visible
         public ButtonEvents onLeftClick;
         public ButtonEvents onRightClick;
         public ButtonEvents onMiddleClick;

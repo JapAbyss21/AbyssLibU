@@ -17,14 +17,12 @@ namespace AbyssLibU
         /// <summary>
         /// SortedSet本体
         /// </summary>
-        [NonSerialized]
-        public SortedSet<T> SortedSet = new SortedSet<T>();
+        [NonSerialized]public SortedSet<T> SortedSet = new SortedSet<T>();
+#pragma warning disable CA2235 // Mark all non-serializable fields
         /// <summary>
         /// Json文字列変換用
         /// </summary>
-        [SerializeField]
-#pragma warning disable CA2235 // Mark all non-serializable fields
-        private List<T> JsonValues;
+        [SerializeField]private List<T> JsonValues;
 #pragma warning restore CA2235 // Mark all non-serializable fields
 
         /// <summary>
@@ -59,21 +57,16 @@ namespace AbyssLibU
         /// <summary>
         /// Dictionary本体
         /// </summary>
-        [NonSerialized]
-        public Dictionary<TKey, TValue> Dictionary = new Dictionary<TKey, TValue>();
+        [NonSerialized]public Dictionary<TKey, TValue> Dictionary = new Dictionary<TKey, TValue>();
+#pragma warning disable CA2235 // Mark all non-serializable fields
         /// <summary>
         /// Json文字列変換用（キー）
         /// </summary>
-        [SerializeField]
-#pragma warning disable CA2235 // Mark all non-serializable fields
-        private List<TKey> Keys;
-#pragma warning restore CA2235 // Mark all non-serializable fields
+        [SerializeField]private List<TKey> Keys;
         /// <summary>
         /// Json文字列変換用（値）
         /// </summary>
-        [SerializeField]
-#pragma warning disable CA2235 // Mark all non-serializable fields
-        private List<TValue> Values;
+        [SerializeField]private List<TValue> Values;
 #pragma warning restore CA2235 // Mark all non-serializable fields
 
         /// <summary>
