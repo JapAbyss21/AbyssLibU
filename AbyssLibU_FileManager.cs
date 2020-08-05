@@ -152,10 +152,10 @@ namespace AbyssLibU
         /// <param name="path">読み込むファイルのパスを指定します。</param>
         /// <param name="obj">読み込み先のobject型を指定します。</param>
         /// <param name="Decrypt">複合するかを指定します（デフォルト：しない）</param>
-        public void LoadObject<T>(string path, out T obj, bool Decrypt = false)
+        public void LoadObject<T>(string path, ref T obj, bool Decrypt = false)
         {
             LoadText(path, out string text, Decrypt);
-            obj = JsonUtility.FromJson<T>(text);
+            JsonUtility.FromJsonOverwrite(text, obj);
         }
     }
 
