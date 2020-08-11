@@ -258,10 +258,7 @@ namespace AbyssLibU
         /// BGMのボリュームを取得します。
         /// </summary>
         /// <returns>BGMのボリュームを返します。</returns>
-        public float GetBGMVolume()
-        {
-            return _BGMVolume;
-        }
+        public float GetBGMVolume() => _BGMVolume;
         /// <summary>
         /// BGMを即座に停止します。
         /// </summary>
@@ -368,10 +365,7 @@ namespace AbyssLibU
         /// BGMが再生中かを返します。
         /// </summary>
         /// <returns>BGMが再生中の場合はtrueを、再生中でない場合はfalseを返します。</returns>
-        public bool IsPlayingBGM()
-        {
-            return _bgmSource.Cast<AudioSource>().Any((e) => e.isPlaying);
-        }
+        public bool IsPlayingBGM() => _bgmSource.Cast<AudioSource>().Any((e) => e.isPlaying);
         //=================================================================================
         //SE
         //=================================================================================
@@ -393,10 +387,7 @@ namespace AbyssLibU
         /// SEのボリュームを取得します。
         /// </summary>
         /// <returns>SEのボリュームを返します。</returns>
-        public float GetSEVolume()
-        {
-            return _SEVolume;
-        }
+        public float GetSEVolume() => _SEVolume;
         /// <summary>
         /// SEを即座に停止します。
         /// </summary>
@@ -441,10 +432,7 @@ namespace AbyssLibU
         /// SEが再生中かを返します。
         /// </summary>
         /// <returns>SEが再生中の場合はtrueを、再生中でない場合はfalseを返します。</returns>
-        public bool IsPlayingSE()
-        {
-            return _seSourceList.Any((e) => e.isPlaying);
-        }
+        public bool IsPlayingSE() => _seSourceList.Any((e) => e.isPlaying);
     }
 
 }
