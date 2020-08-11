@@ -24,11 +24,7 @@ namespace AbyssLibU
         /// <returns>テクスチャデータを返します。</returns>
         public Texture2D GetTexture2D(string path)
         {
-            if (CachedTextureData.ContainsKey(path))
-            {
-                return CachedTextureData[path];
-            }
-            else
+            if (!CachedTextureData.ContainsKey(path))
             {
                 Texture2D texture = Resources.Load<Texture2D>(path);
                 if (texture == null)
@@ -44,8 +40,8 @@ namespace AbyssLibU
                     texture.filterMode = FilterMode.Point;
                 }
                 CachedTextureData.Add(path, texture);
-                return texture;
             }
+            return CachedTextureData[path];
         }
 
         /// <summary>
