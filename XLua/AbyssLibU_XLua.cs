@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using UnityEngine;
 using XLua;
 
@@ -41,14 +42,14 @@ namespace AbyssLibU
         /// テーブル内のLua関数も取得可能です。
         /// </summary>
         /// <typeparam name="T">デリゲート型を指定します。</typeparam>
-        /// <param name="function">Lua関数名を指定します。</param>
+        /// <param name="LuaFuncName">Lua関数名を指定します。</param>
         /// <returns>Lua関数のデリゲートを返します。</returns>
-        public static T GetDelegateLuaFunction<T>(string function)
+        public static T GetDelegateLuaFunction<T>(string LuaFuncName) where T : Delegate
         {
-            string[] str = function.Split('.');
+            string[] str = LuaFuncName.Split('.');
             if (str.Length == 1)
             {
-                return LE.Global.Get<T>(function);
+                return LE.Global.Get<T>(LuaFuncName);
             }
             else
             {
