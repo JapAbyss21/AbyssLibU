@@ -13,7 +13,7 @@ namespace AbyssLibU
         /// <summary>
         /// キャッシュされたLua関数
         /// </summary>
-        private Dictionary<string, T> CachedLuaFunction = new Dictionary<string, T>();
+        protected Dictionary<string, T> CachedLuaFunction = new Dictionary<string, T>();
 
         /// <summary>
         /// Lua関数を取得します。
