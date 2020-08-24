@@ -14,7 +14,7 @@ namespace AbyssLibU
         /// <summary>
         /// LuaEnvインスタンス
         /// </summary>
-        public static LuaEnv LE = new LuaEnv();
+        public static LuaEnv LE { get; } = new LuaEnv();
 
         /// <summary>
         /// スクリプトファイルを読み込み実行します。
