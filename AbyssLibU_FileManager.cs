@@ -122,7 +122,7 @@ namespace AbyssLibU
         /// </summary>
         /// <param name="path">読み込むファイルのパスを指定します。</param>
         /// <param name="text">読み込み先のstring型を指定します。</param>
-        /// <param name="Decrypt">複合するかを指定します（デフォルト：しない）</param>
+        /// <param name="Decrypt">復号化するかを指定します（デフォルト：しない）</param>
         public void LoadText(string path, out string text, bool Decrypt = false)
         {
             // TextAssetとして、Resourcesフォルダからスクリプトファイルをロードする
@@ -151,7 +151,7 @@ namespace AbyssLibU
         /// </summary>
         /// <param name="path">読み込むファイルのパスを指定します。</param>
         /// <param name="obj">読み込み先のobject型を指定します。</param>
-        /// <param name="Decrypt">複合するかを指定します（デフォルト：しない）</param>
+        /// <param name="Decrypt">復号化するかを指定します（デフォルト：しない）</param>
         public void LoadObject<T>(string path, ref T obj, bool Decrypt = false)
         {
             LoadText(path, out string text, Decrypt);
