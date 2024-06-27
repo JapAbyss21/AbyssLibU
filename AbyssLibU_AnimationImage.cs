@@ -138,11 +138,15 @@ namespace AbyssLibU
                 {
                     if (_Animation.isLoop)
                     {
-                        //最初のイメージを設定（ループ）
-                        ImageIdx = 0;
-                        ImageSetting info = _Animation.Images[ImageIdx];
-                        _Image.sprite = textureDataHolder.GetSprite(info.FileName, new Rect(info.X, info.Y, info.Width, info.Height));
-                        Timer.Restart();
+                        //複数枚のアニメーションか確認（1枚なら最初のイメージの再設定が不要）
+                        if (_Animation.Images.Count > 1)
+                        {
+                            //最初のイメージを設定（ループ）
+                            ImageIdx = 0;
+                            ImageSetting info = _Animation.Images[ImageIdx];
+                            _Image.sprite = textureDataHolder.GetSprite(info.FileName, new Rect(info.X, info.Y, info.Width, info.Height));
+                            Timer.Restart();
+                        }
                     }
                     else
                     {
@@ -151,10 +155,6 @@ namespace AbyssLibU
                         {
                             //自動で破棄
                             Destroy(gameObject);
-                        }
-                        else
-                        {
-                            Init();
                         }
                     }
                 }
