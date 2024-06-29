@@ -42,12 +42,19 @@ namespace AbyssLibU
         /// 描画先のアルファ
         /// </summary>
         private float ImageA;
+        /// <summary>
+        /// 同期モードか
+        /// </summary>
+        private bool IsSynchronousMode = false;
+        /// <summary>
+        /// 同期元のアニメーション描画クラス
+        /// </summary>
+        private AbyssLibU_AnimationImage SynchronousSource = null;
 
         /// <summary>
         /// アニメーションの初期化を行います。
         /// </summary>
         /// <param name="Animation">アニメーションを指定します。</param>
-        /// <param name="isLoop">ループするかを指定します。</param>
         /// <param name="textureDataHolder">テクスチャデータの管理用クラスを指定します。</param>
         /// <param name="isAutoKill">アニメーション終了時に自動で破棄するかを指定します。</param>
         /// <returns>自分自身のインスタンスを返します。</returns>
@@ -76,6 +83,19 @@ namespace AbyssLibU
             ImageIdx = 0;
             Timer.Stop();
             return this;
+        }
+
+        /// <summary>
+        /// <para>アニメーションの初期化を同期モードで行います。</para>
+        /// <para>同期モード：同期元と完全に同一のアニメーションを描画します。独立要素は色、再生/停止だけです。</para>
+        /// </summary>
+        /// <param name="SynchronousSource">同期元のアニメーション描画クラスを指定します。</param>
+        /// <returns>自分自身のインスタンスを返します。</returns>
+        public AbyssLibU_AnimationImage InitSynchronousMode(AbyssLibU_AnimationImage SynchronousSource)
+        {
+            IsSynchronousMode = true;
+            this.SynchronousSource = SynchronousSource;
+            return Init();
         }
 
         /// <summary>
@@ -112,52 +132,64 @@ namespace AbyssLibU
             {
                 return;
             }
-            //再生開始
-            if (ImageIdx == 0 && !Timer.IsRunning)
+            //非同期モード
+            if (!IsSynchronousMode)
             {
-                //最初のイメージを設定
-                Color NewColor = _Image.color;
-                NewColor.a = ImageA;
-                _Image.color = NewColor;
-                ImageSetting info = _Animation.Images[ImageIdx];
-                _Image.sprite = textureDataHolder.GetSprite(info.FileName, new Rect(info.X, info.Y, info.Width, info.Height));
-                Timer.Start();
-                return;
-            }
-            //再生中
-            if (Timer.ElapsedMilliseconds >= _Animation.FrameTime)
-            {
-                if (++ImageIdx < _Animation.Images.Count)
+                //再生開始
+                if (ImageIdx == 0 && !Timer.IsRunning)
                 {
-                    //次のイメージを設定
+                    //最初のイメージを設定
+                    Color NewColor = _Image.color;
+                    NewColor.a = ImageA;
+                    _Image.color = NewColor;
                     ImageSetting info = _Animation.Images[ImageIdx];
                     _Image.sprite = textureDataHolder.GetSprite(info.FileName, new Rect(info.X, info.Y, info.Width, info.Height));
-                    Timer.Restart();
+                    Timer.Start();
+                    return;
                 }
-                else
+                //再生中
+                if (Timer.ElapsedMilliseconds >= _Animation.FrameTime)
                 {
-                    if (_Animation.isLoop)
+                    if (++ImageIdx < _Animation.Images.Count)
                     {
-                        //複数枚のアニメーションか確認（1枚なら最初のイメージの再設定が不要）
-                        if (_Animation.Images.Count > 1)
-                        {
-                            //最初のイメージを設定（ループ）
-                            ImageIdx = 0;
-                            ImageSetting info = _Animation.Images[ImageIdx];
-                            _Image.sprite = textureDataHolder.GetSprite(info.FileName, new Rect(info.X, info.Y, info.Width, info.Height));
-                            Timer.Restart();
-                        }
+                        //次のイメージを設定
+                        ImageSetting info = _Animation.Images[ImageIdx];
+                        _Image.sprite = textureDataHolder.GetSprite(info.FileName, new Rect(info.X, info.Y, info.Width, info.Height));
+                        Timer.Restart();
                     }
                     else
                     {
-                        //アニメーション終了
-                        if (isAutoKill)
+                        if (_Animation.isLoop)
                         {
-                            //自動で破棄
-                            Destroy(gameObject);
+                            //複数枚のアニメーションか確認（1枚なら最初のイメージの再設定が不要）
+                            if (_Animation.Images.Count > 1)
+                            {
+                                //最初のイメージを設定（ループ）
+                                ImageIdx = 0;
+                                ImageSetting info = _Animation.Images[ImageIdx];
+                                _Image.sprite = textureDataHolder.GetSprite(info.FileName, new Rect(info.X, info.Y, info.Width, info.Height));
+                                Timer.Restart();
+                            }
+                        }
+                        else
+                        {
+                            //アニメーション終了
+                            if (isAutoKill)
+                            {
+                                //自動で破棄
+                                Destroy(gameObject);
+                            }
                         }
                     }
                 }
+            }
+            //同期モード
+            else
+            {
+                Color NewColor = _Image.color;
+                NewColor.a = ImageA;
+                _Image.color = NewColor;
+                _Image.sprite = SynchronousSource._Image.sprite;
             }
         }
     }
