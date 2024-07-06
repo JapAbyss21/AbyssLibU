@@ -39,18 +39,14 @@ namespace AbyssLibU
         /// 鍵長（デフォルト値）
         /// </summary>
         private const int DEFAULT_KEY_SIZE = 128;
-#pragma warning disable 0649
-#pragma warning disable IDE0044 // 読み取り専用修飾子を追加する
         /// <summary>
         /// パスワード（IV）
         /// </summary>
-        [SerializeField] private string IVPassword;
+        [SerializeField] private string IVPassword = default;
         /// <summary>
         /// パスワード（Key）
         /// </summary>
-        [SerializeField] private string KeyPassword;
-#pragma warning restore IDE0044 // 読み取り専用修飾子を追加する
-#pragma warning restore 0649
+        [SerializeField] private string KeyPassword = default;
         /// <summary>
         /// AES暗号化サービスプロバイダ
         /// </summary>
