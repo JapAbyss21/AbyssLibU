@@ -23,7 +23,7 @@ namespace AbyssLibU
             {
                 if (_instance == null)
                 {
-                    _instance = (AbyssLibU_AudioManager)FindObjectOfType(typeof(AbyssLibU_AudioManager));
+                    _instance = (AbyssLibU_AudioManager)FindAnyObjectByType(typeof(AbyssLibU_AudioManager));
                     if (_instance == null)
                     {
                         throw new MissingComponentException(typeof(AbyssLibU_AudioManager) + "is nothing");
@@ -192,7 +192,7 @@ namespace AbyssLibU
                 {
                     www.SendWebRequest();
                     while (!www.isDone) { }
-                    if (www.isHttpError || www.isNetworkError)
+                    if (www.result == UnityWebRequest.Result.ProtocolError || www.result == UnityWebRequest.Result.ConnectionError)
                     {
                         throw new FileNotFoundException("Could not find file \"" + path + "\"");
                     }

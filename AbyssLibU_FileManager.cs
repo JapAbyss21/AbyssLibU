@@ -22,7 +22,7 @@ namespace AbyssLibU
             {
                 if (_instance == null)
                 {
-                    _instance = (AbyssLibU_FileManager)FindObjectOfType(typeof(AbyssLibU_FileManager));
+                    _instance = (AbyssLibU_FileManager)FindAnyObjectByType(typeof(AbyssLibU_FileManager));
                     if (_instance == null)
                     {
                         throw new MissingComponentException(typeof(AbyssLibU_FileManager) + "is nothing");
