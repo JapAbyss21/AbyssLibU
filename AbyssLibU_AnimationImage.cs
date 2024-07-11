@@ -37,11 +37,25 @@ namespace AbyssLibU
         /// <summary>
         /// 描画先
         /// </summary>
+        public Image Image => _Image ?? (_Image = GetComponent<Image>());
         private Image _Image = null;
         /// <summary>
         /// 描画先のアルファ
         /// </summary>
-        private float ImageA;
+        public float ImageA
+        {
+            get
+            {
+                return Image.color.a;
+            }
+            set
+            {
+                Color NewColor = Image.color;
+                NewColor.a = value;
+                Image.color = NewColor;
+            }
+        }
+
         /// <summary>
         /// 同期モードか
         /// </summary>
@@ -71,14 +85,7 @@ namespace AbyssLibU
         /// <returns>自分自身のインスタンスを返します。</returns>
         public AbyssLibU_AnimationImage Init()
         {
-            if (_Image == null)
-            {
-                _Image = gameObject.GetComponent<Image>();
-                ImageA = _Image.color.a;
-            }
-            Color NewColor = _Image.color;
-            NewColor.a = 0.0f;
-            _Image.color = NewColor;
+            Image.enabled = false;
             IsPlaying = false;
             ImageIdx = 0;
             Timer.Stop();
@@ -111,17 +118,7 @@ namespace AbyssLibU
         /// <summary>
         /// 初期化処理です。
         /// </summary>
-        private void Start()
-        {
-            if (_Image == null)
-            {
-                _Image = gameObject.GetComponent<Image>();
-                ImageA = _Image.color.a;
-            }
-            Color NewColor = _Image.color;
-            NewColor.a = 0.0f;
-            _Image.color = NewColor;
-        }
+        private void Start() => Init();
         /// <summary>
         /// フレーム毎処理です。
         /// </summary>
@@ -139,11 +136,9 @@ namespace AbyssLibU
                 if (ImageIdx == 0 && !Timer.IsRunning)
                 {
                     //最初のイメージを設定
-                    Color NewColor = _Image.color;
-                    NewColor.a = ImageA;
-                    _Image.color = NewColor;
+                    Image.enabled = true;
                     ImageSetting info = _Animation.Images[ImageIdx];
-                    _Image.sprite = textureDataHolder.GetSprite(info.FileName, new Rect(info.X, info.Y, info.Width, info.Height));
+                    Image.sprite = textureDataHolder.GetSprite(info.FileName, new Rect(info.X, info.Y, info.Width, info.Height));
                     Timer.Start();
                     return;
                 }
@@ -154,7 +149,7 @@ namespace AbyssLibU
                     {
                         //次のイメージを設定
                         ImageSetting info = _Animation.Images[ImageIdx];
-                        _Image.sprite = textureDataHolder.GetSprite(info.FileName, new Rect(info.X, info.Y, info.Width, info.Height));
+                        Image.sprite = textureDataHolder.GetSprite(info.FileName, new Rect(info.X, info.Y, info.Width, info.Height));
                         Timer.Restart();
                     }
                     else
@@ -167,13 +162,14 @@ namespace AbyssLibU
                                 //最初のイメージを設定（ループ）
                                 ImageIdx = 0;
                                 ImageSetting info = _Animation.Images[ImageIdx];
-                                _Image.sprite = textureDataHolder.GetSprite(info.FileName, new Rect(info.X, info.Y, info.Width, info.Height));
+                                Image.sprite = textureDataHolder.GetSprite(info.FileName, new Rect(info.X, info.Y, info.Width, info.Height));
                                 Timer.Restart();
                             }
                         }
                         else
                         {
                             //アニメーション終了
+                            Image.enabled = false;
                             if (isAutoKill)
                             {
                                 //自動で破棄
@@ -186,10 +182,8 @@ namespace AbyssLibU
             //同期モード
             else
             {
-                Color NewColor = _Image.color;
-                NewColor.a = ImageA;
-                _Image.color = NewColor;
-                _Image.sprite = SynchronousSource._Image.sprite;
+                Image.enabled = SynchronousSource.Image.enabled;
+                Image.sprite = SynchronousSource.Image.sprite;
             }
         }
     }
