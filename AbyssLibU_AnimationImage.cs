@@ -114,11 +114,10 @@ namespace AbyssLibU
         /// </summary>
         public void Stop() => IsPlaying = false;
 
-
         /// <summary>
         /// 初期化処理です。
         /// </summary>
-        private void Start() => Init();
+        private void Start() { }
         /// <summary>
         /// フレーム毎処理です。
         /// </summary>
@@ -169,11 +168,14 @@ namespace AbyssLibU
                         else
                         {
                             //アニメーション終了
-                            Image.enabled = false;
                             if (isAutoKill)
                             {
                                 //自動で破棄
                                 Destroy(gameObject);
+                            }
+                            else
+                            {
+                                Init();
                             }
                         }
                     }
