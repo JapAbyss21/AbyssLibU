@@ -42,7 +42,7 @@ namespace AbyssLibU
         /// <summary>
         /// アニメーション
         /// </summary>
-        private AbyssLibU_AnimationImage Animation = null;
+        private IAnimationPlayer Animation = null;
         /// <summary>
         /// エフェクトが再生中か
         /// </summary>
@@ -60,7 +60,7 @@ namespace AbyssLibU
         /// コンストラクタです。
         /// </summary>
         /// <param name="Animation"></param>
-        public EffectAnimation(AbyssLibU_AnimationImage Animation) => this.Animation = Animation;
+        public EffectAnimation(IAnimationPlayer Animation) => this.Animation = Animation;
 
         /// <summary>
         /// エフェクトを再生します。

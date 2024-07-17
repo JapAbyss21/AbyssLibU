@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace AbyssLibU
 {
@@ -8,7 +7,7 @@ namespace AbyssLibU
     /// <summary>
     /// アニメーションの描画を行います。
     /// </summary>
-    public class AbyssLibU_AnimationImage : MonoBehaviour, IAnimationPlayer
+    public class AbyssLibU_AnimationSpriteRenderer : MonoBehaviour, IAnimationPlayer
     {
         /// <summary>
         /// アニメーション
@@ -37,22 +36,34 @@ namespace AbyssLibU
         /// <summary>
         /// 描画先
         /// </summary>
-        public Image Image => _Image ?? (_Image = GetComponent<Image>());
-        private Image _Image = null;
+        public SpriteRenderer SpriteRenderer => _SpriteRenderer ?? (_SpriteRenderer = GetComponent<SpriteRenderer>());
+        private SpriteRenderer _SpriteRenderer = null;
+        /// <summary>
+        /// スプライトのPivot
+        /// </summary>
+        private Vector2? Pivot = null;
+        /// <summary>
+        /// スプライトのサイズ
+        /// </summary>
+        private Vector2 SpriteSize;
+        /// <summary>
+        /// 1ユニットのピクセル数
+        /// </summary>
+        private const int PixelPerUnit = 100;
         /// <summary>
         /// 描画先のアルファ
         /// </summary>
-        public float ImageA
+        public float SpriteA
         {
             get
             {
-                return Image.color.a;
+                return SpriteRenderer.color.a;
             }
             set
             {
-                Color NewColor = Image.color;
+                Color NewColor = SpriteRenderer.color;
                 NewColor.a = value;
-                Image.color = NewColor;
+                SpriteRenderer.color = NewColor;
             }
         }
 
@@ -63,7 +74,7 @@ namespace AbyssLibU
         /// <summary>
         /// 同期元のアニメーション描画クラス
         /// </summary>
-        private AbyssLibU_AnimationImage SynchronousSource = null;
+        private AbyssLibU_AnimationSpriteRenderer SynchronousSource = null;
 
         /// <summary>
         /// アニメーションの初期化を行います。
@@ -71,21 +82,24 @@ namespace AbyssLibU
         /// <param name="Animation">アニメーションを指定します。</param>
         /// <param name="textureDataHolder">テクスチャデータの管理用クラスを指定します。</param>
         /// <param name="isAutoKill">アニメーション終了時に自動で破棄するかを指定します。</param>
+        /// <param name="pivot">スプライトに対するピボット地点の相対位置を指定します。</param>
         /// <returns>自分自身のインスタンスを返します。</returns>
-        public AbyssLibU_AnimationImage Init(Animation Animation, TextureDataHolder textureDataHolder, bool isAutoKill = true)
+        public AbyssLibU_AnimationSpriteRenderer Init(Animation Animation, TextureDataHolder textureDataHolder, bool isAutoKill = true, Vector2? pivot = null)
         {
             _Animation = Animation;
             this.textureDataHolder = textureDataHolder;
             this.isAutoKill = isAutoKill;
+            Pivot = pivot;
+            SpriteSize = new Vector2(GetComponent<RectTransform>().sizeDelta.x * PixelPerUnit, GetComponent<RectTransform>().sizeDelta.y * PixelPerUnit);
             return Init();
         }
         /// <summary>
         /// アニメーションの初期化を行います。
         /// </summary>
         /// <returns>自分自身のインスタンスを返します。</returns>
-        public AbyssLibU_AnimationImage Init()
+        public AbyssLibU_AnimationSpriteRenderer Init()
         {
-            Image.enabled = false;
+            SpriteRenderer.enabled = false;
             IsPlaying = false;
             ImageIdx = 0;
             Timer.Stop();
@@ -98,7 +112,7 @@ namespace AbyssLibU
         /// </summary>
         /// <param name="SynchronousSource">同期元のアニメーション描画クラスを指定します。</param>
         /// <returns>自分自身のインスタンスを返します。</returns>
-        public AbyssLibU_AnimationImage InitSynchronousMode(AbyssLibU_AnimationImage SynchronousSource)
+        public AbyssLibU_AnimationSpriteRenderer InitSynchronousMode(AbyssLibU_AnimationSpriteRenderer SynchronousSource)
         {
             IsSynchronousMode = true;
             this.SynchronousSource = SynchronousSource;
@@ -135,9 +149,11 @@ namespace AbyssLibU
                 if (ImageIdx == 0 && !Timer.IsRunning)
                 {
                     //最初のイメージを設定
-                    Image.enabled = true;
+                    SpriteRenderer.enabled = true;
                     ImageSetting info = _Animation.Images[ImageIdx];
-                    Image.sprite = textureDataHolder.GetSprite(info.FileName, new Rect(info.X, info.Y, info.Width, info.Height));
+                    SpriteRenderer.sprite = textureDataHolder.GetSprite(info.FileName, new Rect(info.X, info.Y, info.Width, info.Height), Pivot);
+                    float NewScale = Mathf.Min(SpriteSize.x / info.Width, SpriteSize.y / info.Height) * 100;
+                    transform.localScale = new Vector3(NewScale, NewScale);
                     Timer.Start();
                     return;
                 }
@@ -148,7 +164,9 @@ namespace AbyssLibU
                     {
                         //次のイメージを設定
                         ImageSetting info = _Animation.Images[ImageIdx];
-                        Image.sprite = textureDataHolder.GetSprite(info.FileName, new Rect(info.X, info.Y, info.Width, info.Height));
+                        SpriteRenderer.sprite = textureDataHolder.GetSprite(info.FileName, new Rect(info.X, info.Y, info.Width, info.Height), Pivot);
+                        float NewScale = Mathf.Min(SpriteSize.x / info.Width, SpriteSize.y / info.Height) * 100;
+                        transform.localScale = new Vector3(NewScale, NewScale);
                         Timer.Restart();
                     }
                     else
@@ -161,7 +179,9 @@ namespace AbyssLibU
                                 //最初のイメージを設定（ループ）
                                 ImageIdx = 0;
                                 ImageSetting info = _Animation.Images[ImageIdx];
-                                Image.sprite = textureDataHolder.GetSprite(info.FileName, new Rect(info.X, info.Y, info.Width, info.Height));
+                                SpriteRenderer.sprite = textureDataHolder.GetSprite(info.FileName, new Rect(info.X, info.Y, info.Width, info.Height), Pivot);
+                                float NewScale = Mathf.Min(SpriteSize.x / info.Width, SpriteSize.y / info.Height) * 100;
+                                transform.localScale = new Vector3(NewScale, NewScale);
                                 Timer.Restart();
                             }
                         }
@@ -184,8 +204,9 @@ namespace AbyssLibU
             //同期モード
             else
             {
-                Image.enabled = SynchronousSource.Image.enabled;
-                Image.sprite = SynchronousSource.Image.sprite;
+                SpriteRenderer.enabled = SynchronousSource.SpriteRenderer.enabled;
+                SpriteRenderer.sprite = SynchronousSource.SpriteRenderer.sprite;
+                transform.localScale = SynchronousSource.transform.localScale;
             }
         }
     }
