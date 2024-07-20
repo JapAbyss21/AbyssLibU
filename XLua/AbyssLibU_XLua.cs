@@ -5,7 +5,6 @@ using XLua;
 
 namespace AbyssLibU
 {
-
     /// <summary>
     /// XLuaのユーティリティクラスです。
     /// </summary>
@@ -62,5 +61,4 @@ namespace AbyssLibU
             }
         }
     }
-
 }

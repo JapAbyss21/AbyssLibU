@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace AbyssLibU
 {
-
     /// <summary>
     /// アニメーション
     /// </summary>
@@ -65,10 +64,7 @@ namespace AbyssLibU
         /// <summary>
         /// 初期化を行います。
         /// </summary>
-        public static void Init()
-        {
-            _Animation.Clear();
-        }
+        public static void Init() => _Animation.Clear();
 
         /// <summary>
         /// アニメーションを設定します。
@@ -173,5 +169,4 @@ namespace AbyssLibU
         /// <returns>アニメーションを返します。</returns>
         public static Animation GetAnimation(string Name) => (Animation)_Animation[Name].Clone();
     }
-
 }

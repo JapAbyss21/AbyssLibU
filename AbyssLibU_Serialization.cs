@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace AbyssLibU
 {
-
     /// <summary>
     /// シリアライズ可能なSortedSetです。
     /// ジェネリック型はシリアライズ不可のため継承で隠蔽してください。
@@ -90,5 +89,4 @@ namespace AbyssLibU
             }
         }
     }
-
 }

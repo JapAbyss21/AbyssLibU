@@ -7,7 +7,6 @@ using UnityEngine.Networking;
 
 namespace AbyssLibU
 {
-
     /// <summary>
     /// ＢＧＭおよびＳＥの管理を行うシングルトンマネージャです。
     /// </summary>
@@ -434,5 +433,4 @@ namespace AbyssLibU
         /// <returns>SEが再生中の場合はtrueを、再生中でない場合はfalseを返します。</returns>
         public bool IsPlayingSE() => _seSourceList.Any((e) => e.isPlaying);
     }
-
 }

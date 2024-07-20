@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace AbyssLibU
 {
-
     /// <summary>
     /// Lua関数の読み込みやキャッシュの作成を行うクラスです。
     /// </summary>
@@ -33,5 +32,4 @@ namespace AbyssLibU
             return CachedLuaFunction[LuaFuncName];
         }
     }
-
 }

@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace AbyssLibU
 {
-
     /// <summary>
     /// GameObjectクラスのオブジェクトプールです。
     /// オブジェクトの返却時はSetActive(false)してください。
@@ -70,5 +69,4 @@ namespace AbyssLibU
             return newObj;
         }
     }
-
 }

@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace AbyssLibU
 {
-
     /// <summary>
     /// テクスチャデータの読み込みやキャッシュの作成を行うクラスです。
     /// </summary>
@@ -60,5 +59,4 @@ namespace AbyssLibU
                 new Rect(0, 0, texture.width, texture.height), pivot ?? new Vector2(0.5f, 0.5f));
         }
     }
-
 }

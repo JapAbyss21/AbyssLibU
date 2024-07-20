@@ -2,7 +2,6 @@
 
 namespace AbyssLibU
 {
-
     /// <summary>
     /// イメージの設定です。
     /// </summary>
@@ -66,5 +65,4 @@ namespace AbyssLibU
             return !(setting1 == setting2);
         }
     }
-
 }

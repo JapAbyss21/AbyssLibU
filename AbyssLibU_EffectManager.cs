@@ -5,7 +5,6 @@ using XLua;
 
 namespace AbyssLibU
 {
-
     /// <summary>
     /// エフェクトのインターフェースです。
     /// </summary>
@@ -201,7 +200,6 @@ namespace AbyssLibU
             IsComplete = IsPlaying && Timer.ElapsedMilliseconds >= Duration;
         }
     }
-
 
     /// <summary>
     /// Lua関数のエフェクトです。
@@ -466,18 +464,12 @@ namespace AbyssLibU
         /// エフェクトを追加します。
         /// </summary>
         /// <param name="Effect">エフェクトを指定します。</param>
-        public static void Add(Effects Effect)
-        {
-            Effects.Add(Effect);
-        }
+        public static void Add(Effects Effect) => Effects.Add(Effect);
         /// <summary>
         /// エフェクトを削除します。
         /// </summary>
         /// <param name="Effect">エフェクトを指定します。</param>
-        public static void Remove(Effects Effect)
-        {
-            Effects.Remove(Effect);
-        }
+        public static void Remove(Effects Effect) => Effects.Remove(Effect);
 
         /// <summary>
         /// フレーム毎処理です。
@@ -498,5 +490,4 @@ namespace AbyssLibU
             Effects.RemoveWhere(e => e.IsComplete);
         }
     }
-
 }

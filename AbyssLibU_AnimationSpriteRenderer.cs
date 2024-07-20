@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace AbyssLibU
 {
-
     /// <summary>
     /// アニメーションの描画を行います。
     /// </summary>
@@ -36,7 +35,7 @@ namespace AbyssLibU
         /// <summary>
         /// 描画先
         /// </summary>
-        public SpriteRenderer SpriteRenderer => _SpriteRenderer ?? (_SpriteRenderer = GetComponent<SpriteRenderer>());
+        public SpriteRenderer SpriteRenderer => _SpriteRenderer ??= GetComponent<SpriteRenderer>();
         private SpriteRenderer _SpriteRenderer = null;
         /// <summary>
         /// スプライトのPivot
@@ -210,5 +209,4 @@ namespace AbyssLibU
             }
         }
     }
-
 }

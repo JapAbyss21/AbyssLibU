@@ -4,7 +4,6 @@ using UnityEngine.UI;
 
 namespace AbyssLibU
 {
-
     /// <summary>
     /// Spriteのユーティリティクラスです。
     /// </summary>
@@ -133,5 +132,4 @@ namespace AbyssLibU
             return button.GetComponentInChildren<Text>();
         }
     }
-
 }

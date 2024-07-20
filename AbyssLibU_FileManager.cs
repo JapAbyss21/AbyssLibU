@@ -6,7 +6,6 @@ using UnityEngine;
 
 namespace AbyssLibU
 {
-
     /// <summary>
     /// ファイル入出力の管理を行うシングルトンマネージャです。
     /// </summary>
@@ -154,5 +153,4 @@ namespace AbyssLibU
             JsonUtility.FromJsonOverwrite(text, obj);
         }
     }
-
 }

@@ -4,7 +4,6 @@ using UnityEngine.UI;
 
 namespace AbyssLibU
 {
-
     /// <summary>
     /// アニメーションの描画を行います。
     /// </summary>
@@ -37,7 +36,7 @@ namespace AbyssLibU
         /// <summary>
         /// 描画先
         /// </summary>
-        public Image Image => _Image ?? (_Image = GetComponent<Image>());
+        public Image Image => _Image ??= GetComponent<Image>();
         private Image _Image = null;
         /// <summary>
         /// 描画先のアルファ
@@ -189,5 +188,4 @@ namespace AbyssLibU
             }
         }
     }
-
 }

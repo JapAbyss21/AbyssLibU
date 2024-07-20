@@ -5,7 +5,6 @@ using UnityEngine.EventSystems;
 
 namespace AbyssLibU
 {
-
     /// <summary>
     /// マウスイベントを追加します。
     /// UIコンポーネントに追加してください。
@@ -39,5 +38,4 @@ namespace AbyssLibU
             }
         }
     }
-
 }
