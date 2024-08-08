@@ -424,14 +424,14 @@ namespace AbyssLibU
                         Effect.Update();
                     }
                 }
-                if (OrderingEffects[OrderingEffectsIndex].All(e => e.IsComplete))
+                if (OrderingEffects[OrderingEffectsIndex].All((e) => e.IsComplete))
                 {
                     OrderingEffectsIndex += 1;
                     IsCompleteOrderingEffects = OrderingEffectsIndex >= OrderingEffects.Count;
                 }
             }
             //Insertされたエフェクトを実行
-            foreach (var Position in InsertedEffects.Keys.Where(e => e <= Timer.ElapsedMilliseconds))
+            foreach (var Position in InsertedEffects.Keys.Where((e) => e <= Timer.ElapsedMilliseconds))
             {
                 foreach (var Effect in InsertedEffects[Position])
                 {
@@ -445,7 +445,7 @@ namespace AbyssLibU
                     }
                 }
             }
-            bool IsCompleteInsertedEffects = InsertedEffects.All(e => e.Value.All(e2 => e2.IsComplete));
+            bool IsCompleteInsertedEffects = InsertedEffects.All((e) => e.Value.All((e2) => e2.IsComplete));
             IsComplete = IsCompleteOrderingEffects & IsCompleteInsertedEffects;
         }
     }
@@ -487,7 +487,7 @@ namespace AbyssLibU
                     Effect.Update();
                 }
             }
-            Effects.RemoveWhere(e => e.IsComplete);
+            Effects.RemoveWhere((e) => e.IsComplete);
         }
     }
 }
