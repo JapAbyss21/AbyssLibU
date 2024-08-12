@@ -5,6 +5,25 @@ using UnityEngine.UI;
 namespace AbyssLibU
 {
     /// <summary>
+    /// 文字列操作のユーティリティクラスです。
+    /// </summary>
+    public static class StringUtils
+    {
+        /// <summary>
+        /// 文字列にリッチテキストタグを追加します。
+        /// </summary>
+        /// <param name="Text">追加対象の文字列を指定します。</param>
+        /// <param name="Tag">タグ名を指定します。</param>
+        /// <param name="Value">設定値を指定します。</param>
+        /// <returns>リッチテキストタグを追加した文字列を返します。</returns>
+        public static string AddRichTextTag(string Text, string Tag, string Value = "")
+        {
+            string Head = "<" + Tag + (Value == "" ? ">" : "=" + Value + ">");
+            string End = "</" + Tag + ">";
+            return Head + Text + End;
+        }
+    }
+    /// <summary>
     /// Spriteのユーティリティクラスです。
     /// </summary>
     public static class SpriteUtils
