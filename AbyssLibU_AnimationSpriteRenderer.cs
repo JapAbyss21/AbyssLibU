@@ -17,6 +17,10 @@ namespace AbyssLibU
         /// </summary>
         private TextureDataHolder textureDataHolder;
         /// <summary>
+        /// アニメーション終了時に自動で初期化するか
+        /// </summary>
+        private bool isInit = false;
+        /// <summary>
         /// アニメーション終了時に自動で破棄するか
         /// </summary>
         private bool isAutoKill = true;
@@ -80,13 +84,15 @@ namespace AbyssLibU
         /// </summary>
         /// <param name="Animation">アニメーションを指定します。</param>
         /// <param name="textureDataHolder">テクスチャデータの管理用クラスを指定します。</param>
+        /// <param name="isInit">アニメーション終了時に自動で初期化するかを指定します。</param>
         /// <param name="isAutoKill">アニメーション終了時に自動で破棄するかを指定します。</param>
         /// <param name="pivot">スプライトに対するピボット地点の相対位置を指定します。</param>
         /// <returns>自分自身のインスタンスを返します。</returns>
-        public AbyssLibU_AnimationSpriteRenderer Init(Animation Animation, TextureDataHolder textureDataHolder, bool isAutoKill = true, Vector2? pivot = null)
+        public AbyssLibU_AnimationSpriteRenderer Init(Animation Animation, TextureDataHolder textureDataHolder, bool isInit = false, bool isAutoKill = true, Vector2? pivot = null)
         {
             _Animation = Animation;
             this.textureDataHolder = textureDataHolder;
+            this.isInit = isInit;
             this.isAutoKill = isAutoKill;
             Pivot = pivot;
             SpriteSize = new Vector2(GetComponent<RectTransform>().sizeDelta.x * PixelPerUnit, GetComponent<RectTransform>().sizeDelta.y * PixelPerUnit);
@@ -190,7 +196,10 @@ namespace AbyssLibU
                             }
                             else
                             {
-                                Init();
+                                if (isInit)
+                                {
+                                    Init();
+                                }
                             }
                         }
                     }
