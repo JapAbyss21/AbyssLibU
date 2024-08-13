@@ -32,11 +32,11 @@ namespace AbyssLibU
         /// <summary>
         /// 内部タイマー
         /// </summary>
-        private Stopwatch Timer = new Stopwatch();
+        private readonly Stopwatch Timer = new Stopwatch();
         /// <summary>
         /// 描画先
         /// </summary>
-        public Image Image => _Image ??= GetComponent<Image>();
+        public Image Image => _Image != null ? _Image : _Image = GetComponent<Image>();
         private Image _Image = null;
         /// <summary>
         /// 描画先のアルファ
@@ -113,10 +113,6 @@ namespace AbyssLibU
         /// </summary>
         public void Stop() => IsPlaying = false;
 
-        /// <summary>
-        /// 初期化処理です。
-        /// </summary>
-        private void Start() { }
         /// <summary>
         /// フレーム毎処理です。
         /// </summary>

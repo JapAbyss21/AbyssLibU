@@ -59,7 +59,7 @@ namespace AbyssLibU
         /// <summary>
         /// アニメーションのリポジトリ
         /// </summary>
-        private static Dictionary<string, Animation> _Animation = new Dictionary<string, Animation>();
+        private static readonly Dictionary<string, Animation> _Animation = new Dictionary<string, Animation>();
 
         /// <summary>
         /// 初期化を行います。

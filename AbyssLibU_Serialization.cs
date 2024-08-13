@@ -17,12 +17,10 @@ namespace AbyssLibU
         /// SortedSet本体
         /// </summary>
         [NonSerialized]public SortedSet<T> SortedSet = new SortedSet<T>();
-#pragma warning disable CA2235 // Mark all non-serializable fields
         /// <summary>
         /// Json文字列変換用
         /// </summary>
         [SerializeField]private List<T> JsonValues;
-#pragma warning restore CA2235 // Mark all non-serializable fields
 
         /// <summary>
         /// シリアライズ前コールバックメソッド
@@ -57,7 +55,6 @@ namespace AbyssLibU
         /// Dictionary本体
         /// </summary>
         [NonSerialized]public Dictionary<TKey, TValue> Dictionary = new Dictionary<TKey, TValue>();
-#pragma warning disable CA2235 // Mark all non-serializable fields
         /// <summary>
         /// Json文字列変換用（キー）
         /// </summary>
@@ -66,7 +63,6 @@ namespace AbyssLibU
         /// Json文字列変換用（値）
         /// </summary>
         [SerializeField]private List<TValue> Values;
-#pragma warning restore CA2235 // Mark all non-serializable fields
 
         /// <summary>
         /// シリアライズ前コールバックメソッド

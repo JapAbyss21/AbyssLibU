@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace AbyssLibU
+﻿namespace AbyssLibU
 {
     /// <summary>
     /// イメージの設定です。
@@ -33,9 +31,9 @@ namespace AbyssLibU
             Height = height;
         }
 
-        public override bool Equals(object obj)
+        public override readonly bool Equals(object obj)
         {
-            if (!(obj is ImageSetting))
+            if (obj is not ImageSetting)
             {
                 return false;
             }
@@ -46,15 +44,9 @@ namespace AbyssLibU
                    Width == setting.Width &&
                    Height == setting.Height;
         }
-        public override int GetHashCode()
+        public override readonly int GetHashCode()
         {
-            var hashCode = 1648802308;
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(FileName);
-            hashCode = hashCode * -1521134295 + X.GetHashCode();
-            hashCode = hashCode * -1521134295 + Y.GetHashCode();
-            hashCode = hashCode * -1521134295 + Width.GetHashCode();
-            hashCode = hashCode * -1521134295 + Height.GetHashCode();
-            return hashCode;
+            return System.HashCode.Combine(FileName, X, Y, Width, Height);
         }
         public static bool operator ==(ImageSetting setting1, ImageSetting setting2)
         {

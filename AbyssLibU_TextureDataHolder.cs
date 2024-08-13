@@ -12,7 +12,7 @@ namespace AbyssLibU
         /// <summary>
         /// キャッシュされたテクスチャデータ
         /// </summary>
-        private Dictionary<string, Texture2D> CachedTextureData = new Dictionary<string, Texture2D>();
+        private readonly Dictionary<string, Texture2D> CachedTextureData = new Dictionary<string, Texture2D>();
 
         /// <summary>
         /// テクスチャデータを取得します。

@@ -31,11 +31,11 @@ namespace AbyssLibU
         /// <summary>
         /// 内部タイマー
         /// </summary>
-        private Stopwatch Timer = new Stopwatch();
+        private readonly Stopwatch Timer = new Stopwatch();
         /// <summary>
         /// 描画先
         /// </summary>
-        public SpriteRenderer SpriteRenderer => _SpriteRenderer ??= GetComponent<SpriteRenderer>();
+        public SpriteRenderer SpriteRenderer => _SpriteRenderer != null ? _SpriteRenderer : _SpriteRenderer = GetComponent<SpriteRenderer>();
         private SpriteRenderer _SpriteRenderer = null;
         /// <summary>
         /// スプライトのPivot
@@ -127,10 +127,6 @@ namespace AbyssLibU
         /// </summary>
         public void Stop() => IsPlaying = false;
 
-        /// <summary>
-        /// 初期化処理です。
-        /// </summary>
-        private void Start() { }
         /// <summary>
         /// フレーム毎処理です。
         /// </summary>

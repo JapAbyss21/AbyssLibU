@@ -41,7 +41,7 @@ namespace AbyssLibU
         /// <summary>
         /// アニメーション
         /// </summary>
-        private IAnimationPlayer Animation = null;
+        private readonly IAnimationPlayer Animation = null;
         /// <summary>
         /// エフェクトが再生中か
         /// </summary>
@@ -156,7 +156,7 @@ namespace AbyssLibU
         /// <summary>
         /// 内部タイマー
         /// </summary>
-        private Stopwatch Timer = new Stopwatch();
+        private readonly Stopwatch Timer = new Stopwatch();
         /// <summary>
         /// エフェクトが再生中か
         /// </summary>
@@ -290,7 +290,7 @@ namespace AbyssLibU
         /// <summary>
         /// 順序性のあるエフェクト
         /// </summary>
-        private List<HashSet<IEffect>> OrderingEffects = new List<HashSet<IEffect>>();
+        private readonly List<HashSet<IEffect>> OrderingEffects = new List<HashSet<IEffect>>();
         /// <summary>
         /// 順序性のあるエフェクトのインデックス
         /// </summary>
@@ -298,11 +298,11 @@ namespace AbyssLibU
         /// <summary>
         /// Insertされたエフェクト
         /// </summary>
-        private Dictionary<long, HashSet<IEffect>> InsertedEffects = new Dictionary<long, HashSet<IEffect>>();
+        private readonly Dictionary<long, HashSet<IEffect>> InsertedEffects = new Dictionary<long, HashSet<IEffect>>();
         /// <summary>
         /// 内部タイマー
         /// </summary>
-        private Stopwatch Timer = new Stopwatch();
+        private readonly Stopwatch Timer = new Stopwatch();
         /// <summary>
         /// エフェクトが再生中か
         /// </summary>
@@ -458,7 +458,7 @@ namespace AbyssLibU
         /// <summary>
         /// エフェクト
         /// </summary>
-        private static HashSet<Effects> Effects = new HashSet<Effects>();
+        private static readonly HashSet<Effects> Effects = new HashSet<Effects>();
 
         /// <summary>
         /// エフェクトを追加します。
