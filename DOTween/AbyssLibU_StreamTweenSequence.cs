@@ -26,6 +26,7 @@ namespace AbyssLibU
         public void Play()
         {
             IsPlaying = true;
+            Sequence.OnComplete(() => IsComplete = true);
             Sequence.Play();
         }
         /// <summary>
@@ -45,7 +46,6 @@ namespace AbyssLibU
             {
                 return;
             }
-            IsComplete = IsPlaying && !Sequence.IsPlaying();
         }
     }
 }
