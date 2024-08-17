@@ -137,8 +137,7 @@ namespace AbyssLibU
                 {
                     //最初のイメージを設定
                     Image.enabled = true;
-                    ImageSetting info = _Animation.Images[ImageIdx];
-                    Image.sprite = textureDataHolder.GetSprite(info.FileName, new Rect(info.X, info.Y, info.Width, info.Height));
+                    Image.sprite = textureDataHolder.GetSprite(_Animation.Images[ImageIdx]);
                     Timer.Start();
                     return;
                 }
@@ -148,8 +147,7 @@ namespace AbyssLibU
                     if (++ImageIdx < _Animation.Images.Count)
                     {
                         //次のイメージを設定
-                        ImageSetting info = _Animation.Images[ImageIdx];
-                        Image.sprite = textureDataHolder.GetSprite(info.FileName, new Rect(info.X, info.Y, info.Width, info.Height));
+                        Image.sprite = textureDataHolder.GetSprite(_Animation.Images[ImageIdx]);
                         Timer.Restart();
                     }
                     else
@@ -161,8 +159,7 @@ namespace AbyssLibU
                             {
                                 //最初のイメージを設定（ループ）
                                 ImageIdx = 0;
-                                ImageSetting info = _Animation.Images[ImageIdx];
-                                Image.sprite = textureDataHolder.GetSprite(info.FileName, new Rect(info.X, info.Y, info.Width, info.Height));
+                                Image.sprite = textureDataHolder.GetSprite(_Animation.Images[ImageIdx]);
                                 Timer.Restart();
                             }
                         }

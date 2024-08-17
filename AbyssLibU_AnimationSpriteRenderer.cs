@@ -152,7 +152,7 @@ namespace AbyssLibU
                     //最初のイメージを設定
                     SpriteRenderer.enabled = true;
                     ImageSetting info = _Animation.Images[ImageIdx];
-                    SpriteRenderer.sprite = textureDataHolder.GetSprite(info.FileName, new Rect(info.X, info.Y, info.Width, info.Height), Pivot);
+                    SpriteRenderer.sprite = textureDataHolder.GetSprite(info, Pivot);
                     float NewScale = Mathf.Min(SpriteSize.x / info.Width, SpriteSize.y / info.Height) * 100;
                     transform.localScale = new Vector3(NewScale, NewScale);
                     Timer.Start();
@@ -165,7 +165,7 @@ namespace AbyssLibU
                     {
                         //次のイメージを設定
                         ImageSetting info = _Animation.Images[ImageIdx];
-                        SpriteRenderer.sprite = textureDataHolder.GetSprite(info.FileName, new Rect(info.X, info.Y, info.Width, info.Height), Pivot);
+                        SpriteRenderer.sprite = textureDataHolder.GetSprite(info, Pivot);
                         float NewScale = Mathf.Min(SpriteSize.x / info.Width, SpriteSize.y / info.Height) * 100;
                         transform.localScale = new Vector3(NewScale, NewScale);
                         Timer.Restart();
@@ -180,7 +180,7 @@ namespace AbyssLibU
                                 //最初のイメージを設定（ループ）
                                 ImageIdx = 0;
                                 ImageSetting info = _Animation.Images[ImageIdx];
-                                SpriteRenderer.sprite = textureDataHolder.GetSprite(info.FileName, new Rect(info.X, info.Y, info.Width, info.Height), Pivot);
+                                SpriteRenderer.sprite = textureDataHolder.GetSprite(info, Pivot);
                                 float NewScale = Mathf.Min(SpriteSize.x / info.Width, SpriteSize.y / info.Height) * 100;
                                 transform.localScale = new Vector3(NewScale, NewScale);
                                 Timer.Restart();

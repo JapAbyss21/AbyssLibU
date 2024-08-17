@@ -58,5 +58,14 @@ namespace AbyssLibU
             return Sprite.Create(texture, rect != null ? new Rect(rect.Value.x, texture.height - rect.Value.y - rect.Value.height, rect.Value.width, rect.Value.height) :
                 new Rect(0, 0, texture.width, texture.height), pivot ?? new Vector2(0.5f, 0.5f));
         }
+        /// <summary>
+        /// スプライトデータを取得します。
+        /// テクスチャデータの読み込みはResourcesフォルダ⇒外部データの順に試みます。
+        /// 外部データ読み込み時はラップモード=固定、フィルターモード=ポイントを設定します。
+        /// </summary>
+        /// <param name="info">イメージの設定を指定します。</param>
+        /// <param name="pivot">Rectに対するピボット地点の相対位置を指定します。</param>
+        /// <returns>スプライトデータを返します。</returns>
+        public Sprite GetSprite(ImageSetting info, Vector2? pivot = null) => GetSprite(info.FileName, new Rect(info.X, info.Y, info.Width, info.Height), pivot);
     }
 }
