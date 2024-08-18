@@ -388,6 +388,10 @@ namespace AbyssLibU
         /// </summary>
         /// <param name="Stream">ストリームを指定します。</param>
         public void Remove(Streams Stream) => Streams.Remove(Stream);
+        /// <summary>
+        /// ストリームをキャンセル（全削除）します。
+        /// </summary>
+        public void Cancel() => Streams.Clear();
 
         /// <summary>
         /// ストリームが空か？
@@ -399,15 +403,23 @@ namespace AbyssLibU
         /// </summary>
         public void Update()
         {
-            foreach (var Stream in Streams)
+            foreach (var Stream in Streams.ToArray())
             {
                 if (!Stream.IsPlaying)
                 {
                     Stream.Play();
+                    if (Streams.Count == 0)
+                    {
+                        return;
+                    }
                 }
                 if (!Stream.IsComplete)
                 {
                     Stream.Update();
+                    if (Streams.Count == 0)
+                    {
+                        return;
+                    }
                 }
             }
             Streams.RemoveWhere((e) => e.IsComplete);
