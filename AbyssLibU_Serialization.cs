@@ -11,16 +11,16 @@ namespace AbyssLibU
     /// </summary>
     /// <typeparam name="T">セット内の要素の型</typeparam>
     [Serializable]
-    public abstract class SerializableSortedSet<T> : ISerializationCallbackReceiver
+    public class SerializableSortedSet<T> : ISerializationCallbackReceiver, ICloneable
     {
         /// <summary>
         /// SortedSet本体
         /// </summary>
-        [NonSerialized]public SortedSet<T> SortedSet = new SortedSet<T>();
+        [NonSerialized] public SortedSet<T> SortedSet = new SortedSet<T>();
         /// <summary>
         /// Json文字列変換用
         /// </summary>
-        [SerializeField]private List<T> JsonValues;
+        [SerializeField] private List<T> JsonValues;
 
         /// <summary>
         /// シリアライズ前コールバックメソッド
@@ -40,6 +40,19 @@ namespace AbyssLibU
                 SortedSet.Add(e);
             }
         }
+
+        /// <summary>
+        /// 現在のインスタンスのコピーである新しいオブジェクトを作成します。
+        /// </summary>
+        /// <returns>現在のインスタンスのコピーである新しいオブジェクトを返します。</returns>
+        public object Clone()
+        {
+            SerializableSortedSet<T> NewObj = new SerializableSortedSet<T>()
+            {
+                SortedSet = new SortedSet<T>(SortedSet),
+            };
+            return NewObj;
+        }
     }
 
     /// <summary>
@@ -49,20 +62,20 @@ namespace AbyssLibU
     /// <typeparam name="TKey">ディクショナリ内のキーの型</typeparam>
     /// <typeparam name="TValue">ディクショナリ内の値の型</typeparam>
     [Serializable]
-    public abstract class SerializableDictionary<TKey, TValue> : ISerializationCallbackReceiver
+    public class SerializableDictionary<TKey, TValue> : ISerializationCallbackReceiver, ICloneable
     {
         /// <summary>
         /// Dictionary本体
         /// </summary>
-        [NonSerialized]public Dictionary<TKey, TValue> Dictionary = new Dictionary<TKey, TValue>();
+        [NonSerialized] public Dictionary<TKey, TValue> Dictionary = new Dictionary<TKey, TValue>();
         /// <summary>
         /// Json文字列変換用（キー）
         /// </summary>
-        [SerializeField]private List<TKey> Keys;
+        [SerializeField] private List<TKey> Keys;
         /// <summary>
         /// Json文字列変換用（値）
         /// </summary>
-        [SerializeField]private List<TValue> Values;
+        [SerializeField] private List<TValue> Values;
 
         /// <summary>
         /// シリアライズ前コールバックメソッド
@@ -83,6 +96,19 @@ namespace AbyssLibU
             {
                 Dictionary.Add(Keys[i], Values[i]);
             }
+        }
+
+        /// <summary>
+        /// 現在のインスタンスのコピーである新しいオブジェクトを作成します。
+        /// </summary>
+        /// <returns>現在のインスタンスのコピーである新しいオブジェクトを返します。</returns>
+        public object Clone()
+        {
+            SerializableDictionary<TKey, TValue> NewObj = new SerializableDictionary<TKey, TValue>()
+            {
+                Dictionary = new Dictionary<TKey, TValue>(Dictionary),
+            };
+            return NewObj;
         }
     }
 }
