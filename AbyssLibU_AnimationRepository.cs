@@ -6,7 +6,7 @@ namespace AbyssLibU
     /// <summary>
     /// アニメーション
     /// </summary>
-    public class Animation : ICloneable
+    public class Animation
     {
         /// <summary>
         /// イメージ（複数）
@@ -39,7 +39,7 @@ namespace AbyssLibU
         /// 現在のインスタンスのコピーである新しいオブジェクトを作成します。
         /// </summary>
         /// <returns>現在のインスタンスのコピーである新しいオブジェクトを返します。</returns>
-        public object Clone()
+        public Animation Clone()
         {
             Animation NewObj = new Animation
             {
@@ -167,6 +167,6 @@ namespace AbyssLibU
         /// </summary>
         /// <param name="Name">アニメーション名を指定します。</param>
         /// <returns>アニメーションを返します。</returns>
-        public static Animation GetAnimation(string Name) => (Animation)_Animation[Name].Clone();
+        public static Animation GetAnimation(string Name) => _Animation[Name].Clone();
     }
 }
