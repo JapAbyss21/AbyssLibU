@@ -11,7 +11,7 @@ namespace AbyssLibU
     /// </summary>
     /// <typeparam name="T">セット内の要素の型</typeparam>
     [Serializable]
-    public class SerializableSortedSet<T> : ISerializationCallbackReceiver, ICloneable
+    public class SerializableSortedSet<T> : ISerializationCallbackReceiver
     {
         /// <summary>
         /// SortedSet本体
@@ -40,19 +40,6 @@ namespace AbyssLibU
                 SortedSet.Add(e);
             }
         }
-
-        /// <summary>
-        /// 現在のインスタンスのコピーである新しいオブジェクトを作成します。
-        /// </summary>
-        /// <returns>現在のインスタンスのコピーである新しいオブジェクトを返します。</returns>
-        public object Clone()
-        {
-            SerializableSortedSet<T> NewObj = new SerializableSortedSet<T>()
-            {
-                SortedSet = new SortedSet<T>(SortedSet),
-            };
-            return NewObj;
-        }
     }
 
     /// <summary>
@@ -62,7 +49,7 @@ namespace AbyssLibU
     /// <typeparam name="TKey">ディクショナリ内のキーの型</typeparam>
     /// <typeparam name="TValue">ディクショナリ内の値の型</typeparam>
     [Serializable]
-    public class SerializableDictionary<TKey, TValue> : ISerializationCallbackReceiver, ICloneable
+    public class SerializableDictionary<TKey, TValue> : ISerializationCallbackReceiver
     {
         /// <summary>
         /// Dictionary本体
@@ -96,19 +83,6 @@ namespace AbyssLibU
             {
                 Dictionary.Add(Keys[i], Values[i]);
             }
-        }
-
-        /// <summary>
-        /// 現在のインスタンスのコピーである新しいオブジェクトを作成します。
-        /// </summary>
-        /// <returns>現在のインスタンスのコピーである新しいオブジェクトを返します。</returns>
-        public object Clone()
-        {
-            SerializableDictionary<TKey, TValue> NewObj = new SerializableDictionary<TKey, TValue>()
-            {
-                Dictionary = new Dictionary<TKey, TValue>(Dictionary),
-            };
-            return NewObj;
         }
     }
 }
