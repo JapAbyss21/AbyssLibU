@@ -20,7 +20,7 @@ namespace AbyssLibU
         /// <summary>
         /// Json文字列変換用
         /// </summary>
-        [SerializeField] private List<T> JsonValues;
+        [SerializeField] private List<T> JsonValues = new List<T>();
 
         /// <summary>
         /// シリアライズ前コールバックメソッド
@@ -58,11 +58,11 @@ namespace AbyssLibU
         /// <summary>
         /// Json文字列変換用（キー）
         /// </summary>
-        [SerializeField] private List<TKey> Keys;
+        [SerializeField] private List<TKey> Keys = new List<TKey>();
         /// <summary>
         /// Json文字列変換用（値）
         /// </summary>
-        [SerializeField] private List<TValue> Values;
+        [SerializeField] private List<TValue> Values = new List<TValue>();
 
         /// <summary>
         /// シリアライズ前コールバックメソッド
