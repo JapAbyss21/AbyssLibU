@@ -25,7 +25,7 @@ namespace AbyssLibU
         {
             // TextAssetとして、Resourcesフォルダからスクリプトファイルをロードする
             TextAsset ta = Resources.Load(path) as TextAsset;
-            if (ta != null)
+            if (ta is not null)
             {
                 LE.DoString(ta.text);
             }

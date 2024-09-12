@@ -20,10 +20,10 @@ namespace AbyssLibU
         {
             get
             {
-                if (_instance == null)
+                if (_instance is null)
                 {
                     _instance = (AbyssLibU_AudioManager)FindAnyObjectByType(typeof(AbyssLibU_AudioManager));
-                    if (_instance == null)
+                    if (_instance is null)
                     {
                         throw new MissingComponentException(typeof(AbyssLibU_AudioManager) + "is nothing");
                     }
@@ -151,7 +151,7 @@ namespace AbyssLibU
             if (!_AudioClips.ContainsKey(path))
             {
                 AudioClip result = Resources.Load<AudioClip>(path);
-                if (result == null)
+                if (result is null)
                 {
                     throw new FileNotFoundException("Could not find resource \"" + path + "\"");
                 }
@@ -293,7 +293,7 @@ namespace AbyssLibU
         /// <param name="intro">イントロ部分を指定します。</param>
         public void PlayBGM(string loop, string intro = "")
         {
-            if (IsPlayingBGM() && (_bgmSource[_bgmSourceIterator, 1].clip != null ? _bgmSource[_bgmSourceIterator, 1].clip.name : "") == loop)
+            if (IsPlayingBGM() && (_bgmSource[_bgmSourceIterator, 1].clip is not null ? _bgmSource[_bgmSourceIterator, 1].clip.name : "") == loop)
             {
                 //BGM再生中に同BGMを再生した場合は何もしない
                 //同じBGMかどうかはループ部分だけ見て判定（問題ないよね？）
@@ -331,7 +331,7 @@ namespace AbyssLibU
         /// <param name="intro">イントロ部分を指定します。</param>
         public void FadeBGM(string loop, float fadeSpeed, string intro = "")
         {
-            if (IsPlayingBGM() && (_bgmSource[_bgmSourceIterator, 1].clip != null ? _bgmSource[_bgmSourceIterator, 1].clip.name : "") == loop)
+            if (IsPlayingBGM() && (_bgmSource[_bgmSourceIterator, 1].clip is not null ? _bgmSource[_bgmSourceIterator, 1].clip.name : "") == loop)
             {
                 //BGM再生中に同BGMをフェード再生した場合は何もしない
                 //同じBGMかどうかはループ部分だけ見て判定（問題ないよね？）

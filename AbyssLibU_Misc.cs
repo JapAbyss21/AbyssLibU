@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -38,11 +41,11 @@ namespace AbyssLibU
         public static Sprite LoadResources(string path, Rect? rect = null, Vector2? pivot = null)
         {
             Texture2D texture = Resources.Load<Texture2D>(path);
-            if (texture == null)
+            if (texture is null)
             {
                 throw new FileNotFoundException("Could not find resource \"" + path + "\"");
             }
-            return Sprite.Create(texture, rect != null ? new Rect(rect.Value.x, texture.height - rect.Value.y - rect.Value.height, rect.Value.width, rect.Value.height) :
+            return Sprite.Create(texture, rect is not null ? new Rect(rect.Value.x, texture.height - rect.Value.y - rect.Value.height, rect.Value.width, rect.Value.height) :
                 new Rect(0, 0, texture.width, texture.height), pivot ?? new Vector2(0.5f, 0.5f));
         }
         /// <summary>
@@ -64,7 +67,7 @@ namespace AbyssLibU
             texture.LoadImage(result);
             texture.wrapMode = TextureWrapMode.Clamp;
             texture.filterMode = FilterMode.Point;
-            return Sprite.Create(texture, rect != null ? new Rect(rect.Value.x, texture.height - rect.Value.y - rect.Value.height, rect.Value.width, rect.Value.height) :
+            return Sprite.Create(texture, rect is not null ? new Rect(rect.Value.x, texture.height - rect.Value.y - rect.Value.height, rect.Value.width, rect.Value.height) :
                 new Rect(0, 0, texture.width, texture.height), pivot ?? new Vector2(0.5f, 0.5f));
         }
         /// <summary>
@@ -139,7 +142,7 @@ namespace AbyssLibU
         /// <returns>Buttonクラスのインスタンスを返します。</returns>
         public static Button Instantiate(string name)
         {
-            return Object.Instantiate(Resources.Load<Button>(name));
+            return UnityEngine.Object.Instantiate(Resources.Load<Button>(name));
         }
         /// <summary>
         /// ButtonクラスからTextクラスを取得します。
@@ -149,6 +152,23 @@ namespace AbyssLibU
         public static Text GetButtonText(Button button)
         {
             return button.GetComponentInChildren<Text>();
+        }
+    }
+
+    /// <summary>
+    /// Dictionaryの拡張メソッド
+    /// </summary>
+    public static class DictionaryExtension
+    {
+        public static bool Remove<TKey, TValue>(this Dictionary<TKey, TValue> Source, Func<TKey, bool> Cond)
+        {
+            bool Result = false;
+            IEnumerable<TKey> Keys = Source.Keys.Where(Cond).ToArray();
+            foreach (var Item in Keys)
+            {
+                Result |= Source.Remove(Item);
+            }
+            return Result;
         }
     }
 }

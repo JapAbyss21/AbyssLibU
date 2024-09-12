@@ -21,10 +21,14 @@ namespace AbyssLibU
         /// <returns>Lua関数を返します。</returns>
         public T GetLuaFunction(string LuaFuncName)
         {
+            if (LuaFuncName is null)
+            {
+                return null;
+            }
             if (!CachedLuaFunction.ContainsKey(LuaFuncName))
             {
                 T NewFunc = XLuaUtils.GetDelegateLuaFunction<T>(LuaFuncName);
-                if (NewFunc != null)
+                if (NewFunc is not null)
                 {
                     CachedLuaFunction.Add(LuaFuncName, NewFunc);
                 }

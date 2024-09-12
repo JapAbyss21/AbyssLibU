@@ -26,7 +26,7 @@ namespace AbyssLibU
             if (!CachedTextureData.ContainsKey(path))
             {
                 Texture2D texture = Resources.Load<Texture2D>(path);
-                if (texture == null)
+                if (texture is null)
                 {
                     byte[] result;
                     using (BinaryReader bin = new BinaryReader(new FileStream(Application.dataPath + "/" + path, FileMode.Open)))
@@ -55,7 +55,7 @@ namespace AbyssLibU
         public Sprite GetSprite(string path, Rect? rect = null, Vector2? pivot = null)
         {
             Texture2D texture = GetTexture2D(path);
-            return Sprite.Create(texture, rect != null ? new Rect(rect.Value.x, texture.height - rect.Value.y - rect.Value.height, rect.Value.width, rect.Value.height) :
+            return Sprite.Create(texture, rect is not null ? new Rect(rect.Value.x, texture.height - rect.Value.y - rect.Value.height, rect.Value.width, rect.Value.height) :
                 new Rect(0, 0, texture.width, texture.height), pivot ?? new Vector2(0.5f, 0.5f));
         }
         /// <summary>

@@ -19,10 +19,10 @@ namespace AbyssLibU
         {
             get
             {
-                if (_instance == null)
+                if (_instance is null)
                 {
                     _instance = (AbyssLibU_FileManager)FindAnyObjectByType(typeof(AbyssLibU_FileManager));
-                    if (_instance == null)
+                    if (_instance is null)
                     {
                         throw new MissingComponentException(typeof(AbyssLibU_FileManager) + "is nothing");
                     }
@@ -122,7 +122,7 @@ namespace AbyssLibU
         {
             // TextAssetとして、Resourcesフォルダからスクリプトファイルをロードする
             TextAsset ta = Resources.Load(path) as TextAsset;
-            if (ta != null)
+            if (ta is not null)
             {
                 text = ta.text;
             }

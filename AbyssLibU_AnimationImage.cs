@@ -40,7 +40,7 @@ namespace AbyssLibU
         /// <summary>
         /// 描画先
         /// </summary>
-        public Image Image => _Image != null ? _Image : _Image = GetComponent<Image>();
+        public Image Image => _Image is not null ? _Image : _Image = GetComponent<Image>();
         private Image _Image = null;
         /// <summary>
         /// 描画先のアルファ

@@ -39,7 +39,7 @@ namespace AbyssLibU
         /// <summary>
         /// 描画先
         /// </summary>
-        public SpriteRenderer SpriteRenderer => _SpriteRenderer != null ? _SpriteRenderer : _SpriteRenderer = GetComponent<SpriteRenderer>();
+        public SpriteRenderer SpriteRenderer => _SpriteRenderer is not null ? _SpriteRenderer : _SpriteRenderer = GetComponent<SpriteRenderer>();
         private SpriteRenderer _SpriteRenderer = null;
         /// <summary>
         /// スプライトのPivot
