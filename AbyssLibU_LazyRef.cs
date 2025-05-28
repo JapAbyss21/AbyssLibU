@@ -41,7 +41,7 @@ namespace AbyssLibU
         /// オブジェクト参照を取得します。
         /// 初回アクセス時にFindし、以降はキャッシュされた参照を返します。
         /// </summary>
-        public T Value
+        public T Ref
         {
             get
             {
