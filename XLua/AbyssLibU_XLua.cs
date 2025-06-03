@@ -45,19 +45,47 @@ namespace AbyssLibU
         /// <returns>Lua関数のデリゲートを返します。</returns>
         public static T GetDelegateLuaFunction<T>(string LuaFuncName) where T : Delegate
         {
-            string[] str = LuaFuncName.Split('.');
-            if (str.Length == 1)
+            try
             {
-                return LE.Global.Get<T>(LuaFuncName);
-            }
-            else
-            {
-                LuaTable luaTable = LE.Global.Get<LuaTable>(str[0]);
-                for (int i = 1; i < str.Length - 1; i++)
+                string[] str = LuaFuncName.Split('.');
+                if (str.Length == 1)
                 {
-                    luaTable = luaTable.Get<LuaTable>(str[i]);
+                    T Result = LE.Global.Get<T>(LuaFuncName);
+                    if (Result is null)
+                    {
+                        Debug.LogWarning($"[XLua] Lua global function not found: {LuaFuncName}");
+                    }
+                    return Result;
                 }
-                return luaTable.Get<T>(str[str.Length - 1]);
+                else
+                {
+                    LuaTable luaTable = LE.Global.Get<LuaTable>(str[0]);
+                    if (luaTable is null)
+                    {
+                        Debug.LogWarning($"[XLua] Lua table not found: {str[0]} (while resolving {LuaFuncName})");
+                        return null;
+                    }
+                    for (int i = 1; i < str.Length - 1; i++)
+                    {
+                        luaTable = luaTable.Get<LuaTable>(str[i]);
+                        if (luaTable is null)
+                        {
+                            Debug.LogWarning($"[XLua] Lua nested table not found: {str[i]} (while resolving {LuaFuncName})");
+                            return null;
+                        }
+                    }
+                    T Result = luaTable.Get<T>(str[str.Length - 1]);
+                    if (Result is null)
+                    {
+                        Debug.LogWarning($"[XLua] Lua function not found in table: {str[str.Length - 1]} (while resolving {LuaFuncName})");
+                    }
+                    return Result;
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"[XLua] Error resolving Lua function '{LuaFuncName}': {e.Message}");
+                return null;
             }
         }
     }

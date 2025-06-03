@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace AbyssLibU
 {
@@ -21,19 +22,22 @@ namespace AbyssLibU
         /// <returns>Lua関数を返します。</returns>
         public T GetLuaFunction(string LuaFuncName)
         {
-            if (LuaFuncName is null)
+            if (string.IsNullOrEmpty(LuaFuncName))
             {
                 return null;
             }
-            if (!CachedLuaFunction.ContainsKey(LuaFuncName))
+            if (CachedLuaFunction.TryGetValue(LuaFuncName, out T Result))
             {
-                T NewFunc = XLuaUtils.GetDelegateLuaFunction<T>(LuaFuncName);
-                if (NewFunc is not null)
-                {
-                    CachedLuaFunction.Add(LuaFuncName, NewFunc);
-                }
+                return Result;
             }
-            return CachedLuaFunction[LuaFuncName];
+            Result = XLuaUtils.GetDelegateLuaFunction<T>(LuaFuncName);
+            if (Result is not null)
+            {
+                CachedLuaFunction[LuaFuncName] = Result;
+                return Result;
+            }
+            Debug.LogWarning($"[XLua] Lua function not resolved: {LuaFuncName}");
+            return null;
         }
     }
 }
