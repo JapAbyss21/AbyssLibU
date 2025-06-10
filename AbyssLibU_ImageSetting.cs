@@ -1,11 +1,8 @@
-﻿using System;
-
-namespace AbyssLibU
+﻿namespace AbyssLibU
 {
     /// <summary>
     /// イメージの設定です。
     /// </summary>
-    [Serializable]
     public struct ImageSetting
     {
         /// <summary>
