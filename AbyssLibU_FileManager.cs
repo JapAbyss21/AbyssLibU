@@ -1,7 +1,12 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Text;
+using System.Reflection;
+using System.Collections.Generic;
 using System.Security.Cryptography;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using UnityEngine;
 
 namespace AbyssLibU
@@ -52,6 +57,31 @@ namespace AbyssLibU
         private AesCryptoServiceProvider CPS;
 
         /// <summary>
+        /// フィールドのみを対象とするContractResolver（プロパティは対象外とする）
+        /// </summary>
+        private class IgnorePropertiesResolver : DefaultContractResolver
+        {
+            protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
+            {
+                return base.CreateProperties(type, memberSerialization)
+                    .Where(e =>
+                    {
+                        MemberInfo[] members = e.DeclaringType?.GetMember(e.UnderlyingName);
+                        return members is not null && members.Any(e => e.MemberType == MemberTypes.Field);
+                    })
+                    .ToList();
+            }
+        }
+        /// <summary>
+        /// フィールドのみを対象とするJson設定（プロパティは対象外とする）
+        /// </summary>
+        private static readonly JsonSerializerSettings SaveSettings_IgnoreProperties = new()
+        {
+            ContractResolver = new IgnorePropertiesResolver(),
+            Formatting = Formatting.Indented
+        };
+
+        /// <summary>
         /// 初期化処理です。
         /// パスワードが未入力の場合、自動生成されます。
         /// </summary>
@@ -98,7 +128,7 @@ namespace AbyssLibU
             File.WriteAllText(Application.dataPath + "/" + path, text);
         }
         /// <summary>
-        /// オブジェクトデータを保存します。
+        /// オブジェクトデータを保存します（Newtonsoft.Json使用）
         /// シリアライズ可能なオブジェクトである必要があります。
         /// </summary>
         /// <param name="path">保存ファイルのパスを指定します。</param>
@@ -106,7 +136,8 @@ namespace AbyssLibU
         /// <param name="Encrypt">暗号化するかを指定します（デフォルト：しない）</param>
         public void SaveObject(string path, object obj, bool Encrypt = false)
         {
-            SaveText(path, JsonUtility.ToJson(obj, !Encrypt), Encrypt);
+            string Json = JsonConvert.SerializeObject(obj, SaveSettings_IgnoreProperties);
+            SaveText(path, Json, Encrypt);
         }
 
         //=================================================================================
@@ -141,16 +172,16 @@ namespace AbyssLibU
             }
         }
         /// <summary>
-        /// オブジェクトデータを読み込みます。
+        /// オブジェクトデータを読み込みます（Newtonsoft.Json使用）
         /// シリアライズ可能なオブジェクトである必要があります。
         /// </summary>
         /// <param name="path">読み込むファイルのパスを指定します。</param>
         /// <param name="obj">読み込み先のobject型を指定します。</param>
         /// <param name="Decrypt">復号化するかを指定します（デフォルト：しない）</param>
-        public void LoadObject<T>(string path, ref T obj, bool Decrypt = false)
+        public void LoadObject<T>(string path, out T obj, bool Decrypt = false)
         {
             LoadText(path, out string text, Decrypt);
-            JsonUtility.FromJsonOverwrite(text, obj);
+            obj = JsonConvert.DeserializeObject<T>(text, SaveSettings_IgnoreProperties);
         }
     }
 }
