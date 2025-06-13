@@ -75,7 +75,7 @@ namespace AbyssLibU
         /// <summary>
         /// フィールドのみを対象とするJson設定（プロパティは対象外とする）
         /// </summary>
-        private static readonly JsonSerializerSettings SaveSettings_IgnoreProperties = new()
+        public static readonly JsonSerializerSettings SaveSettings_IgnoreProperties = new()
         {
             ContractResolver = new IgnorePropertiesResolver(),
             Formatting = Formatting.Indented
