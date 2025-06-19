@@ -23,16 +23,24 @@ namespace AbyssLibU
         /// <param name="path">スクリプトファイルのパスを指定します。</param>
         public static void DoScript(string path)
         {
-            // TextAssetとして、Resourcesフォルダからスクリプトファイルをロードする
-            TextAsset ta = Resources.Load(path) as TextAsset;
-            if (ta is not null)
+            try
             {
-                LE.DoString(ta.text);
+                // TextAssetとして、Resourcesフォルダからスクリプトファイルをロードする
+                TextAsset ta = Resources.Load(path) as TextAsset;
+                if (ta is not null)
+                {
+                    LE.DoString(ta.text, path);
+                }
+                // テキストデータとして、外部データからスクリプトファイルをロードする
+                else
+                {
+                    LE.DoString(File.ReadAllText(Application.dataPath + "/" + path, System.Text.Encoding.GetEncoding("UTF-8")), path);
+                }
             }
-            // テキストデータとして、外部データからスクリプトファイルをロードする
-            else
+            catch (Exception ex)
             {
-                LE.DoString(File.ReadAllText(Application.dataPath + "/" + path, System.Text.Encoding.GetEncoding("UTF-8")));
+                Debug.LogError($"[XLua] An error occurred while running Lua script (File: {path})\n{ex}");
+                throw;
             }
         }
 
