@@ -64,20 +64,25 @@ namespace AbyssLibU
             protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
             {
                 return base.CreateProperties(type, memberSerialization)
-                    .Where(e =>
-                    {
-                        MemberInfo[] members = e.DeclaringType?.GetMember(e.UnderlyingName);
-                        return members is not null && members.Any(e => e.MemberType == MemberTypes.Field);
-                    })
+                    .Where(p => IsField(p))
                     .ToList();
+            }
+            private static bool IsField(JsonProperty prop)
+            {
+                var memberInfo = prop.DeclaringType?.GetMember(prop.UnderlyingName,
+                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy)
+                    .FirstOrDefault();
+                return memberInfo is FieldInfo;
             }
         }
         /// <summary>
         /// フィールドのみを対象とするJson設定（プロパティは対象外とする）
+        /// また、型情報を出力する。
         /// </summary>
         public static readonly JsonSerializerSettings SaveSettings_IgnoreProperties = new()
         {
             ContractResolver = new IgnorePropertiesResolver(),
+            TypeNameHandling = TypeNameHandling.Auto,
             Formatting = Formatting.Indented
         };
 
