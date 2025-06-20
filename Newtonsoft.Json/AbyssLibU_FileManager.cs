@@ -187,6 +187,10 @@ namespace AbyssLibU
         {
             LoadText(path, out string text, Decrypt);
             obj = JsonConvert.DeserializeObject<T>(text, SaveSettings_IgnoreProperties);
+            if (obj is AbyssLibU_IExternalRefRoot Root)
+            {
+                Root.SetExternalRef();
+            }
         }
     }
 }
