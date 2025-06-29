@@ -53,6 +53,12 @@ namespace AbyssLibU
                 this.LuaFuncUpdate = XLuaUtils.GetDelegateLuaFunction<StreamLuaFunction>(LuaFuncUpdate);
             }
         }
+        public StreamLuaFunc(StreamLuaFunction LuaFuncPlay, StreamLuaFunction LuaFuncStop = null, StreamLuaFunction LuaFuncUpdate = null)
+        {
+            this.LuaFuncPlay = LuaFuncPlay;
+            this.LuaFuncStop = LuaFuncStop;
+            this.LuaFuncUpdate = LuaFuncUpdate;
+        }
 
         /// <summary>
         /// ストリームを再生します。
