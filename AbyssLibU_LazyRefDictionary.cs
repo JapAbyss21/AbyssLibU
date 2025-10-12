@@ -19,10 +19,6 @@ namespace AbyssLibU
         private readonly Dictionary<string, GameObject> Cache = new Dictionary<string, GameObject>();
 
         /// <summary>
-        /// デフォルトコンストラクタ（禁止）です。
-        /// </summary>
-        private AbyssLibU_LazyRefDictionary() { }
-        /// <summary>
         /// コンストラクタです。
         /// </summary>
         /// <param name="Root">検索の起点となるTransformを指定します。</param>

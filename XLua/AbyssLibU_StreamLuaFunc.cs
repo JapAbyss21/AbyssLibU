@@ -35,9 +35,11 @@ namespace AbyssLibU
         public bool IsComplete { get; set; } = false;
 
         /// <summary>
-        /// デフォルトコンストラクタ（禁止）です。
+        /// コンストラクタです。
         /// </summary>
-        private StreamLuaFunc() { }
+        /// <param name="LuaFuncPlay">再生時に呼び出すLua関数名を指定します。</param>
+        /// <param name="LuaFuncStop">停止時に呼び出すLua関数名を指定します。</param>
+        /// <param name="LuaFuncUpdate">フレーム毎に呼び出すLua関数名を指定します。</param>
         public StreamLuaFunc(string LuaFuncPlay, string LuaFuncStop, string LuaFuncUpdate)
         {
             if (!string.IsNullOrEmpty(LuaFuncPlay))

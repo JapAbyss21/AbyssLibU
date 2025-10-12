@@ -51,13 +51,9 @@ namespace AbyssLibU
         public bool IsComplete { get; private set; } = false;
 
         /// <summary>
-        /// デフォルトコンストラクタ（禁止）です。
-        /// </summary>
-        private StreamAnimation() { }
-        /// <summary>
         /// コンストラクタです。
         /// </summary>
-        /// <param name="Animation"></param>
+        /// <param name="Animation">アニメーション描画クラスを指定します。</param>
         public StreamAnimation(IAnimationPlayer Animation) => this.Animation = Animation;
 
         /// <summary>
@@ -112,9 +108,10 @@ namespace AbyssLibU
         public bool IsComplete { get; private set; } = false;
 
         /// <summary>
-        /// デフォルトコンストラクタ（禁止）です。
+        /// コンストラクタです。
         /// </summary>
-        private StreamSound() { }
+        /// <param name="path">再生するサウンドのファイルパスを指定します。</param>
+        /// <param name="volume">再生するサウンドの音量を指定します。</param>
         public StreamSound(string path, float volume = 1.0f)
         {
             Path = path;
@@ -166,9 +163,9 @@ namespace AbyssLibU
         public bool IsComplete { get; private set; } = false;
 
         /// <summary>
-        /// デフォルトコンストラクタ（禁止）です。
+        /// コンストラクタです。
         /// </summary>
-        private StreamDelay() { }
+        /// <param name="Duration">遅延時間を指定します（単位：ミリ秒）</param>
         public StreamDelay(long Duration) => this.Duration = Duration;
 
         /// <summary>
