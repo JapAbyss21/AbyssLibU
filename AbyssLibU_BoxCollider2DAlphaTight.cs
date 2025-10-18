@@ -220,28 +220,9 @@ namespace AbyssLibU
             {
                 return Cached;
             }
-            try
-            {
-                //直接アクセス可能ならそのまま使う
-                _ = Src.GetPixels32();
-                ReadableCache[ID] = Src;
-                return Src;
-            }
-            catch
-            {
-                //非Readableならコピーを作る
-                RenderTexture RT = RenderTexture.GetTemporary(Src.width, Src.height, 0, RenderTextureFormat.ARGB32);
-                Graphics.Blit(Src, RT);
-                RenderTexture Prev = RenderTexture.active;
-                RenderTexture.active = RT;
-                Texture2D Copy = new Texture2D(Src.width, Src.height, TextureFormat.RGBA32, false);
-                Copy.ReadPixels(new Rect(0, 0, RT.width, RT.height), 0, 0);
-                Copy.Apply(false, false);
-                RenderTexture.active = Prev;
-                RenderTexture.ReleaseTemporary(RT);
-                ReadableCache[ID] = Copy;
-                return Copy;
-            }
+            Texture2D Result = SpriteUtils.EnsureReadableCopy(Src);
+            ReadableCache[ID] = Result;
+            return Result;
         }
     }
 }

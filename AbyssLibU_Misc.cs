@@ -45,6 +45,7 @@ namespace AbyssLibU
             {
                 throw new FileNotFoundException("Could not find resource \"" + path + "\"");
             }
+            texture = EnsureReadableCopy(texture);
             return Sprite.Create(texture, rect is not null ? new Rect(rect.Value.x, texture.height - rect.Value.y - rect.Value.height, rect.Value.width, rect.Value.height) :
                 new Rect(0, 0, texture.width, texture.height), pivot ?? new Vector2(0.5f, 0.5f));
         }
@@ -67,8 +68,37 @@ namespace AbyssLibU
             texture.LoadImage(result);
             texture.wrapMode = TextureWrapMode.Clamp;
             texture.filterMode = FilterMode.Point;
+            texture = EnsureReadableCopy(texture);
             return Sprite.Create(texture, rect is not null ? new Rect(rect.Value.x, texture.height - rect.Value.y - rect.Value.height, rect.Value.width, rect.Value.height) :
                 new Rect(0, 0, texture.width, texture.height), pivot ?? new Vector2(0.5f, 0.5f));
+        }
+        /// <summary>
+        /// 読み取り可能なTexture2Dを取得します。
+        /// </summary>
+        /// <param name="Src">取得元のTexture2Dを指定します。</param>
+        /// <returns>読み取り可能なTexture2Dを返します。</returns>
+        public static Texture2D EnsureReadableCopy(Texture2D Src)
+        {
+            try
+            {
+                //直接アクセス可能ならそのまま使う
+                _ = Src.GetPixels32();
+                return Src;
+            }
+            catch (UnityException)
+            {
+                //非Readableならコピーを作る
+                RenderTexture RT = RenderTexture.GetTemporary(Src.width, Src.height, 0, RenderTextureFormat.ARGB32);
+                Graphics.Blit(Src, RT);
+                RenderTexture Prev = RenderTexture.active;
+                RenderTexture.active = RT;
+                Texture2D Copy = new Texture2D(Src.width, Src.height, TextureFormat.RGBA32, false, false);
+                Copy.ReadPixels(new Rect(0, 0, RT.width, RT.height), 0, 0);
+                Copy.Apply(false, false);
+                RenderTexture.active = Prev;
+                RenderTexture.ReleaseTemporary(RT);
+                return Copy;
+            }
         }
         /// <summary>
         /// テクスチャデータを読み込みます。

@@ -38,6 +38,7 @@ namespace AbyssLibU
                     texture.wrapMode = TextureWrapMode.Clamp;
                     texture.filterMode = FilterMode.Point;
                 }
+                texture = SpriteUtils.EnsureReadableCopy(texture);
                 CachedTextureData.Add(path, texture);
             }
             return CachedTextureData[path];
