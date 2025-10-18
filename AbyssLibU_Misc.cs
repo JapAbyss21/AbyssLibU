@@ -85,7 +85,7 @@ namespace AbyssLibU
                 _ = Src.GetPixels32();
                 return Src;
             }
-            catch (UnityException)
+            catch
             {
                 //非Readableならコピーを作る
                 RenderTexture RT = RenderTexture.GetTemporary(Src.width, Src.height, 0, RenderTextureFormat.ARGB32);
