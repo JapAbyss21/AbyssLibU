@@ -14,21 +14,13 @@ namespace AbyssLibU
         [Tooltip("falseにするとSprite.rectを使用（性能重視）")]
         public bool UseAlphaTight = true;
         //コンポーネント
-        SpriteRenderer Renderer;
-        BoxCollider2D Collider;
+        private SpriteRenderer Renderer = null;
+        private BoxCollider2D Collider = null;
         //キャッシュ
         private static readonly Dictionary<(int TextureID, int x, int y, int w, int h, int Threshold), RectInt> AABBCache = new Dictionary<(int TextureID, int x, int y, int w, int h, int Threshold), RectInt>();
         private static readonly Dictionary<int, Texture2D> ReadableCache = new Dictionary<int, Texture2D>();
 
         // ==========================================================
-        /// <summary>
-        /// 初期化処理です。
-        /// </summary>
-        void Awake()
-        {
-            Renderer = GetComponent<SpriteRenderer>();
-            Collider = GetComponent<BoxCollider2D>();
-        }
         /// <summary>
         /// 有効時処理です。
         /// </summary>
@@ -42,6 +34,14 @@ namespace AbyssLibU
         /// </summary>
         private void UpdateCollider()
         {
+            if (!Renderer)
+            {
+                Renderer = GetComponent<SpriteRenderer>();
+            }
+            if (!Collider)
+            {
+                Collider = GetComponent<BoxCollider2D>();
+            }
             if (!Renderer || !Collider)
             {
                 return;
