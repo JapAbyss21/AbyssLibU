@@ -146,9 +146,9 @@ namespace AbyssLibU
     public class StreamDelay : IStream
     {
         /// <summary>
-        /// 遅延時間（ミリ秒）
+        /// 遅延時間（秒）
         /// </summary>
-        private readonly long Duration;
+        private readonly float Duration;
         /// <summary>
         /// 内部タイマー
         /// </summary>
@@ -165,8 +165,8 @@ namespace AbyssLibU
         /// <summary>
         /// コンストラクタです。
         /// </summary>
-        /// <param name="Duration">遅延時間を指定します（単位：ミリ秒）</param>
-        public StreamDelay(long Duration) => this.Duration = Duration;
+        /// <param name="Duration">遅延時間を指定します（単位：秒）</param>
+        public StreamDelay(float Duration) => this.Duration = Duration;
 
         /// <summary>
         /// ストリームを再生します。
@@ -193,7 +193,7 @@ namespace AbyssLibU
             {
                 return;
             }
-            IsComplete = IsPlaying && Timer.ElapsedMilliseconds >= Duration;
+            IsComplete = IsPlaying && Timer.Elapsed.TotalSeconds >= Duration;
         }
     }
 
@@ -213,7 +213,7 @@ namespace AbyssLibU
         /// <summary>
         /// Insertされたストリーム
         /// </summary>
-        private readonly Dictionary<long, HashSet<IStream>> InsertedStreams = new Dictionary<long, HashSet<IStream>>();
+        private readonly Dictionary<float, HashSet<IStream>> InsertedStreams = new Dictionary<float, HashSet<IStream>>();
         /// <summary>
         /// 内部タイマー
         /// </summary>
@@ -282,10 +282,10 @@ namespace AbyssLibU
         /// 指定した時間にストリームを追加します。
         /// ストリーム再生中は何もしません。
         /// </summary>
-        /// <param name="Position">時間（ミリ秒）を指定します。</param>
+        /// <param name="Position">時間（秒）を指定します。</param>
         /// <param name="Stream">追加するストリームを指定します。</param>
         /// <returns>自分自身のインスタンスを返します。</returns>
-        public Streams Insert(long Position, IStream Stream)
+        public Streams Insert(float Position, IStream Stream)
         {
             if (!IsPlaying)
             {
@@ -346,7 +346,7 @@ namespace AbyssLibU
                 }
             }
             //Insertされたストリームを実行
-            foreach (var Position in InsertedStreams.Keys.Where((e) => e <= Timer.ElapsedMilliseconds))
+            foreach (var Position in InsertedStreams.Keys.Where((e) => e <= Timer.Elapsed.TotalSeconds))
             {
                 foreach (var Stream in InsertedStreams[Position])
                 {
