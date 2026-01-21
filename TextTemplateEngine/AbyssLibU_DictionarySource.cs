@@ -9,6 +9,7 @@ namespace AbyssLibU
     /// キー参照を解決するカスタムSourceクラスです。
     /// ネスト参照（参照先にさらに{dic.key}がある場合）も深さ制限付きで解決します。
     /// </summary>
+    [Serializable]
     internal sealed class AbyssLibU_DictionarySource : ISource
     {
         private readonly Func<IReadOnlyDictionary<string, string>> FuncGetDic;
@@ -71,9 +72,9 @@ namespace AbyssLibU
             {
                 return $"<MISSING:{Key}>";
             }
-            if (_ctx != null && _ctx.TryGetMemo(Key, out var Memo))
+            if (_ctx != null && _ctx.TryGetMemo(Key, out var MemoTemplate))
             {
-                return Memo;
+                return FormatWithArgsIfNeeded(MemoTemplate, SelectorInfo);
             }
             if (_ctx != null && !_ctx.PushKey(Key))
             {
@@ -81,28 +82,46 @@ namespace AbyssLibU
             }
             try
             {
-                string Result = Value;
-                // ネスト解決：結果に {d. が含まれていたら、同じargsで再フォーマット
-                if (_ctx != null && _ctx.Depth < FuncGetMaxDepth() && Result.Contains("{d."))
+                string Template = Value;
+                // まずネスト解決
+                if (_ctx != null && _ctx.Depth < FuncGetMaxDepth() && Template.Contains("{d."))
                 {
                     _ctx.Depth++;
                     try
                     {
-                        IList<object> args = SelectorInfo.FormatDetails?.OriginalArgs;
-                        Result = FuncGetFormatter().Format(Result, args ?? Array.Empty<object>());
+                        Template = FuncGetFormatter().Format(Template, Array.Empty<object>());
                     }
                     finally
                     {
                         _ctx.Depth--;
                     }
                 }
-                _ctx?.SetMemo(Key, Result);
-                return Result;
+                _ctx?.SetMemo(Key, Template);
+                return FormatWithArgsIfNeeded(Template, SelectorInfo);
             }
             finally
             {
                 _ctx?.PopKey(Key);
             }
+        }
+        /// <summary>
+        /// 引数埋め込みを行います。
+        /// </summary>
+        /// <param name="TargetText">対象の文字列を指定します。</param>
+        /// <param name="SelectorInfo">ISelectorInfoクラスを指定します。</param>
+        /// <returns>引数埋め込みを行った文字列を返します。</returns>
+        private string FormatWithArgsIfNeeded(string TargetText, ISelectorInfo SelectorInfo)
+        {
+            var Args = SelectorInfo.FormatDetails?.OriginalArgs;
+            if (Args is null || Args.Count == 0)
+            {
+                return TargetText;
+            }
+            if (TargetText.IndexOf('{') < 0)
+            {
+                return TargetText;
+            }
+            return FuncGetFormatter().Format(TargetText, Args is object[] A ? A : System.Linq.Enumerable.ToArray(Args));
         }
     }
 }
