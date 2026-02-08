@@ -273,12 +273,11 @@ namespace AbyssLibU
         /// </summary>
         /// <param name="SetName">セット名を指定します。</param>
         /// <param name="Duration">アニメーション時間（秒）を指定します。</param>
-        /// <returns>指定セット名の矢印を一括非表示にしてプールに返却するTweenを返します。</returns>
+        /// <returns>指定セット名の矢印を一括非表示にしてプールに返却するTweenを返します。セットが存在しない場合は空のSequenceを返します。</returns>
         public Sequence GetTweenClear(string SetName, float Duration)
         {
             if (!_ArrowSets.ContainsKey(SetName))
             {
-                Debug.LogWarning($"[AbyssLibU_BezierArrowController] Set '{SetName}' does not exist.");
                 return DOTween.Sequence();
             }
             return ClearSet(SetName, Duration);
@@ -298,13 +297,13 @@ namespace AbyssLibU
 
         /// <summary>
         /// 指定セット名の矢印を即時非表示にしてプールに返却します（アニメーションなし）
+        /// セットが存在しない場合は何もしません。
         /// </summary>
         /// <param name="SetName">セット名を指定します。</param>
         public void ClearImmediate(string SetName)
         {
             if (!_ArrowSets.ContainsKey(SetName))
             {
-                Debug.LogWarning($"[AbyssLibU_BezierArrowController] Set '{SetName}' does not exist.");
                 return;
             }
             ClearSetImmediate(SetName);
