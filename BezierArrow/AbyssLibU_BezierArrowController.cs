@@ -9,45 +9,28 @@ namespace AbyssLibU
     /// 矢印タイプのデータ構造です。
     /// </summary>
     [Serializable]
-    public struct AbyssLibU_ArrowTypeData
+    public class AbyssLibU_ArrowTypeData
     {
         /// <summary>
         /// 使用するプレハブID
         /// </summary>
-        public int PrefabID;
+        public int PrefabID = 0;
         /// <summary>
-        /// 線の色
+        /// 線の色（null=プレハブデフォルト）
         /// </summary>
-        public Color LineColor;
+        public Color? LineColor = null;
         /// <summary>
-        /// 線の太さ
+        /// 線の太さ（null=プレハブデフォルト）
         /// </summary>
-        public float LineWidth;
+        public float? LineWidth = null;
         /// <summary>
         /// 曲率（正で左凸、負で右凸）
         /// </summary>
-        public float Curvature;
+        public float Curvature = 0.3f;
         /// <summary>
         /// 消去時に末尾から消すかどうか
         /// </summary>
-        public bool FromTail;
-
-        /// <summary>
-        /// デフォルト値でArrowTypeDataを作成します。
-        /// </summary>
-        /// <param name="PrefabID">使用するプレハブIDを指定します。</param>
-        /// <returns>デフォルト値のArrowTypeDataを返します。</returns>
-        public static AbyssLibU_ArrowTypeData Default(int PrefabID = 0)
-        {
-            return new AbyssLibU_ArrowTypeData
-            {
-                PrefabID = PrefabID,
-                LineColor = Color.red,
-                LineWidth = 5f,
-                Curvature = 0.3f,
-                FromTail = true,
-            };
-        }
+        public bool FromTail = true;
     }
 
     /// <summary>
@@ -202,7 +185,7 @@ namespace AbyssLibU
                 ArrowObj.SetActive(false);
                 return;
             }
-            Arrow.Init(Source, Destination, SourceEdge, DestinationEdge, TypeData.Curvature, TypeData.LineColor, TypeData.LineWidth);
+            Arrow.Init(Source, Destination, SourceEdge, DestinationEdge, TypeData.Curvature, TypeData.LineColor, TypeData.LineWidth ?? -1f);
             Arrow.Hide();
             ArrowInstance Instance = new ArrowInstance
             {
