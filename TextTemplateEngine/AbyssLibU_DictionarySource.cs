@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEngine.Localization.SmartFormat;
 using UnityEngine.Localization.SmartFormat.Core.Extensions;
 
@@ -12,6 +13,8 @@ namespace AbyssLibU
     [Serializable]
     internal sealed class AbyssLibU_DictionarySource : ISource
     {
+        private static readonly Regex NestedDicRefRegex = new Regex(@"\{d\.(\w+)\}", RegexOptions.Compiled);
+
         private readonly Func<IReadOnlyDictionary<string, string>> FuncGetDic;
         private readonly Func<SmartFormatter> FuncGetFormatter;
         private readonly Func<int> FuncGetMaxDepth;
@@ -83,13 +86,13 @@ namespace AbyssLibU
             try
             {
                 string Template = Value;
-                // まずネスト解決
+                // まずネスト解決（{d.Key}のみをRegexで解決し、{0}等のSmartFormat書式はそのまま保持する）
                 if (_ctx != null && _ctx.Depth < FuncGetMaxDepth() && Template.Contains("{d."))
                 {
                     _ctx.Depth++;
                     try
                     {
-                        Template = FuncGetFormatter().Format(Template, Array.Empty<object>());
+                        Template = ResolveNestedDicRefs(Template, Dic);
                     }
                     finally
                     {
@@ -103,6 +106,54 @@ namespace AbyssLibU
             {
                 _ctx?.PopKey(Key);
             }
+        }
+        /// <summary>
+        /// テンプレート内の{d.Key}参照のみをRegexで解決します。
+        /// SmartFormatの書式（{0}等）には触れません。
+        /// </summary>
+        /// <param name="Template">テンプレート文字列を指定します。</param>
+        /// <param name="Dic">辞書を指定します。</param>
+        /// <returns>{d.Key}参照を解決した文字列を返します。</returns>
+        private string ResolveNestedDicRefs(string Template, IReadOnlyDictionary<string, string> Dic)
+        {
+            return NestedDicRefRegex.Replace(Template, m =>
+            {
+                string NestedKey = m.Groups[1].Value;
+                if (Dic == null || !Dic.TryGetValue(NestedKey, out var NestedValue))
+                {
+                    return $"<MISSING:{NestedKey}>";
+                }
+                if (_ctx.TryGetMemo(NestedKey, out var MemoValue))
+                {
+                    return MemoValue;
+                }
+                if (!_ctx.PushKey(NestedKey))
+                {
+                    return $"<CYCLE:{NestedKey}>";
+                }
+                try
+                {
+                    string Resolved = NestedValue;
+                    if (_ctx.Depth < FuncGetMaxDepth() && Resolved.Contains("{d."))
+                    {
+                        _ctx.Depth++;
+                        try
+                        {
+                            Resolved = ResolveNestedDicRefs(Resolved, Dic);
+                        }
+                        finally
+                        {
+                            _ctx.Depth--;
+                        }
+                    }
+                    _ctx.SetMemo(NestedKey, Resolved);
+                    return Resolved;
+                }
+                finally
+                {
+                    _ctx.PopKey(NestedKey);
+                }
+            });
         }
         /// <summary>
         /// 引数埋め込みを行います。
