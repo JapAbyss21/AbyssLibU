@@ -38,9 +38,14 @@ namespace AbyssLibU
                 {
                     return Value;
                 }
-                GameObject Found = Root.Find(Key).gameObject;
-                Cache[Key] = Found;
-                return Found;
+                Transform Found = Root.Find(Key);
+                if (Found == null)
+                {
+                    Debug.LogError($"[AbyssLibU_LazyRefDictionary] Key not found: '{Key}' under '{Root.name}'");
+                    return null;
+                }
+                Cache[Key] = Found.gameObject;
+                return Found.gameObject;
             }
         }
     }

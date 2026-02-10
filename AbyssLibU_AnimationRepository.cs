@@ -122,7 +122,7 @@ namespace AbyssLibU
         /// </summary>
         /// <param name="Name">アニメーション名を指定します。</param>
         /// <param name="Animation">追加するアニメーションを指定します。</param>
-        public static void AddAnimatiion(string Name, Animation Animation) => _Animation[Name].Images.AddRange(Animation.Images);
+        public static void AddAnimation(string Name, Animation Animation) => _Animation[Name].Images.AddRange(Animation.Images);
         /// <summary>
         /// アニメーションを追加します。
         /// </summary>
@@ -157,7 +157,7 @@ namespace AbyssLibU
             for (int i = 0; i < ImageNum; i++)
             {
                 int ImageX = ImageWidth * (i < DivNumX ? i : (i % DivNumX));
-                int ImageY = ImageHeight * (i < DivNumX ? i : (i / DivNumX));
+                int ImageY = ImageHeight * (i < DivNumX ? 0 : (i / DivNumX));
                 _Animation[Name].Images.Add(new ImageSetting { FileName = FileName, X = ImageX, Y = ImageY, Width = ImageWidth, Height = ImageHeight });
             }
         }

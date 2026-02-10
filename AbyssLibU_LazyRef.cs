@@ -47,13 +47,19 @@ namespace AbyssLibU
                 }
                 else
                 {
+                    Transform Found = Root.Find(Path);
+                    if (Found == null)
+                    {
+                        Debug.LogError($"[AbyssLibU_LazyRef] Path not found: '{Path}' under '{Root.name}'");
+                        return null;
+                    }
                     if (typeof(T) == typeof(GameObject))
                     {
-                        return Cache = Root.Find(Path).gameObject as T;
+                        return Cache = Found.gameObject as T;
                     }
                     else
                     {
-                        return Cache = Root.Find(Path).GetComponent<T>();
+                        return Cache = Found.GetComponent<T>();
                     }
                 }
             }

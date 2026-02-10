@@ -98,8 +98,8 @@ namespace AbyssLibU
                 KeySize = DEFAULT_KEY_SIZE,
                 Mode = CipherMode.CBC,
                 Padding = PaddingMode.PKCS7,
-                IV = string.IsNullOrEmpty(IVPassword) ? new Rfc2898DeriveBytes(IVPassword, DEFAULT_BLOCK_SIZE / 8).GetBytes(DEFAULT_BLOCK_SIZE / 8) : Convert.FromBase64String(IVPassword),
-                Key = string.IsNullOrEmpty(KeyPassword) ? new Rfc2898DeriveBytes(KeyPassword, DEFAULT_KEY_SIZE / 8).GetBytes(DEFAULT_KEY_SIZE / 8) : Convert.FromBase64String(KeyPassword)
+                IV = string.IsNullOrEmpty(IVPassword) ? new Rfc2898DeriveBytes(IVPassword ?? "", DEFAULT_BLOCK_SIZE / 8).GetBytes(DEFAULT_BLOCK_SIZE / 8) : Convert.FromBase64String(IVPassword),
+                Key = string.IsNullOrEmpty(KeyPassword) ? new Rfc2898DeriveBytes(KeyPassword ?? "", DEFAULT_KEY_SIZE / 8).GetBytes(DEFAULT_KEY_SIZE / 8) : Convert.FromBase64String(KeyPassword)
             };
             if (string.IsNullOrEmpty(IVPassword))
             {

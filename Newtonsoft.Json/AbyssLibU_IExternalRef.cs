@@ -1,49 +1,49 @@
-namespace AbyssLibU
+﻿namespace AbyssLibU
 {
-#pragma warning disable IDE1006 // �����X�^�C��
+#pragma warning disable IDE1006 // 命名スタイル
     /// <summary>
-    /// �O���Q�Ɨp�C���^�[�t�F�[�X
+    /// 外部参照用インターフェース
     /// </summary>
-    /// <typeparam name="T">�O���Q�Ƃ���^�BAbyssLibU_IExternalRefRoot�C���^�[�t�F�[�X���K�v�ł��B</typeparam>
+    /// <typeparam name="T">外部参照する型。AbyssLibU_IExternalRefRootインターフェースが必要です。</typeparam>
     public interface AbyssLibU_IExternalRef<T> where T : AbyssLibU_IExternalRefRoot
     {
         /// <summary>
-        /// �O���Q�Ƃ�ݒ肵�܂��B
+        /// 外部参照を設定します。
         /// </summary>
-        /// <param name="ExRefRoot">�O���Q�Ƃ��w�肵�܂��B</param>
+        /// <param name="ExRefRoot">外部参照を指定します。</param>
         public void SetExternalRef(T ExRefRoot);
     }
 
     /// <summary>
-    /// �O���Q�Ɨp�C���^�[�t�F�[�X�i�O���Q�Ƃ�2�̏ꍇ�j
+    /// 外部参照用インターフェース（外部参照が2つの場合）
     /// </summary>
-    /// <typeparam name="T">�O���Q�Ƃ���^�BAbyssLibU_IExternalRefRoot�C���^�[�t�F�[�X���K�v�ł��B</typeparam>
-    /// <typeparam name="T2">�O���Q�Ƃ���^�i����2�j</typeparam>
+    /// <typeparam name="T">外部参照する型。AbyssLibU_IExternalRefRootインターフェースが必要です。</typeparam>
+    /// <typeparam name="T2">外部参照する型（その2）</typeparam>
     public interface AbyssLibU_IExternalRefs<T, T2> where T : AbyssLibU_IExternalRefRoot
     {
         /// <summary>
-        /// �O���Q�Ƃ�ݒ肵�܂��B
+        /// 外部参照を設定します。
         /// </summary>
-        /// <param name="ExRefRoot">�O���Q�Ɓi����1�j���w�肵�܂��B</param>
-        /// <param name="ExRef2">�O���Q�Ɓi����2�j���w�肵�܂��B</param>
+        /// <param name="ExRefRoot">外部参照（その1）を指定します。</param>
+        /// <param name="ExRef2">外部参照（その2）を指定します。</param>
         public void SetExternalRefs(T ExRefRoot, T2 ExRef2);
     }
 
     /// <summary>
-    /// �O���Q�Ɨp�C���^�[�t�F�[�X�i�O���Q�Ƃ�2�̏ꍇ�j
+    /// 外部参照用インターフェース（外部参照が3つの場合）
     /// </summary>
-    /// <typeparam name="T">�O���Q�Ƃ���^�BAbyssLibU_IExternalRefRoot�C���^�[�t�F�[�X���K�v�ł��B</typeparam>
-    /// <typeparam name="T2">�O���Q�Ƃ���^�i����2�j</typeparam>
-    /// <typeparam name="T3">�O���Q�Ƃ���^�i����3�j</typeparam>
+    /// <typeparam name="T">外部参照する型。AbyssLibU_IExternalRefRootインターフェースが必要です。</typeparam>
+    /// <typeparam name="T2">外部参照する型（その2）</typeparam>
+    /// <typeparam name="T3">外部参照する型（その3）</typeparam>
     public interface AbyssLibU_IExternalRefs<T, T2, T3> where T : AbyssLibU_IExternalRefRoot
     {
         /// <summary>
-        /// �O���Q�Ƃ�ݒ肵�܂��B
+        /// 外部参照を設定します。
         /// </summary>
-        /// <param name="ExRefRoot">�O���Q�Ɓi����1�j���w�肵�܂��B</param>
-        /// <param name="ExRef2">�O���Q�Ɓi����2�j���w�肵�܂��B</param>
-        /// <param name="ExRef3">�O���Q�Ɓi����3�j���w�肵�܂��B</param>
+        /// <param name="ExRefRoot">外部参照（その1）を指定します。</param>
+        /// <param name="ExRef2">外部参照（その2）を指定します。</param>
+        /// <param name="ExRef3">外部参照（その3）を指定します。</param>
         public void SetExternalRefs(T ExRefRoot, T2 ExRef2, T3 ExRef3);
     }
-#pragma warning restore IDE1006 // �����X�^�C��
+#pragma warning restore IDE1006 // 命名スタイル
 }

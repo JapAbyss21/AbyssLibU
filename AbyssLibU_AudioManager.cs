@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -160,10 +161,10 @@ namespace AbyssLibU
             }
         }
         /// <summary>
-        /// 外部データからサウンドデータを読み込みます。
+        /// 外部データからサウンドデータを非同期で読み込みます。
         /// </summary>
         /// <param name="path">サウンドデータのパスを指定します。</param>
-        public void LoadExternalData(string path)
+        public async UniTask LoadExternalDataAsync(string path)
         {
             if (_AudioClips.ContainsKey(path))
             {
@@ -189,8 +190,7 @@ namespace AbyssLibU
                 }
                 using (UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(URIPath.AbsoluteUri, audioType))
                 {
-                    www.SendWebRequest();
-                    while (!www.isDone) { }
+                    await www.SendWebRequest();
                     if (www.result == UnityWebRequest.Result.ProtocolError || www.result == UnityWebRequest.Result.ConnectionError)
                     {
                         throw new FileNotFoundException("Could not find file \"" + path + "\"");
@@ -206,20 +206,57 @@ namespace AbyssLibU
             }
         }
         /// <summary>
-        /// サウンドデータを読み込みます。
+        /// サウンドデータを非同期で読み込みます。
         /// Resourcesフォルダ⇒外部データの順に読み込みを試みます。
         /// </summary>
         /// <param name="path">サウンドデータのパスを指定します。</param>
-        public void Load(string path)
+        public async UniTask LoadAsync(string path)
         {
-            try
+            if (_AudioClips.ContainsKey(path))
             {
-                LoadResources(path);
+                return;
             }
-            catch (FileNotFoundException)
+            AudioClip clip = Resources.Load<AudioClip>(path);
+            if (clip != null)
             {
-                LoadExternalData(path);
+                clip.name = path;
+                _AudioClips[path] = clip;
+                return;
             }
+            await LoadExternalDataAsync(path);
+        }
+        /// <summary>
+        /// サウンドデータを非同期で事前読み込みします。
+        /// ローディング画面等で使用してください。
+        /// </summary>
+        /// <param name="paths">サウンドデータのパスを指定します。</param>
+        public async UniTask PreloadAsync(params string[] paths)
+        {
+            foreach (string path in paths)
+            {
+                await LoadAsync(path);
+            }
+        }
+        /// <summary>
+        /// サウンドデータがキャッシュにあることを保証します。
+        /// Resourcesフォルダからのみ同期読み込みを試みます。
+        /// 外部データの場合はPreloadAsyncで事前読み込みしてください。
+        /// </summary>
+        /// <param name="path">サウンドデータのパスを指定します。</param>
+        private void EnsureLoaded(string path)
+        {
+            if (_AudioClips.ContainsKey(path))
+            {
+                return;
+            }
+            AudioClip clip = Resources.Load<AudioClip>(path);
+            if (clip != null)
+            {
+                clip.name = path;
+                _AudioClips[path] = clip;
+                return;
+            }
+            Debug.LogWarning($"[AudioManager] Audio not preloaded: '{path}'. Use PreloadAsync() first.");
         }
         /// <summary>
         /// 全サウンドデータを解放します。
@@ -303,7 +340,7 @@ namespace AbyssLibU
             _bgmSource[_bgmSourceIterator, 0].Stop();
             _bgmSource[_bgmSourceIterator, 1].Stop();
             //読み込み
-            Load(loop);
+            EnsureLoaded(loop);
             AudioSource LoopSource = _bgmSource[_bgmSourceIterator, 1];
             LoopSource.clip = _AudioClips[loop];
             LoopSource.volume = _BGMVolume;
@@ -313,7 +350,7 @@ namespace AbyssLibU
             }
             else
             {
-                Load(intro);
+                EnsureLoaded(intro);
                 AudioSource IntroSource = _bgmSource[_bgmSourceIterator, 0];
                 IntroSource.clip = _AudioClips[intro];
                 IntroSource.volume = _BGMVolume;
@@ -340,7 +377,7 @@ namespace AbyssLibU
             //前BGMをフェード停止
             FadeOutBGM(fadeSpeed);
             //読み込み
-            Load(loop);
+            EnsureLoaded(loop);
             AudioSource LoopSource = _bgmSource[_bgmSourceIterator, 1];
             LoopSource.clip = _AudioClips[loop];
             LoopSource.volume = 0.0f;
@@ -350,7 +387,7 @@ namespace AbyssLibU
             }
             else
             {
-                Load(intro);
+                EnsureLoaded(intro);
                 AudioSource IntroSource = _bgmSource[_bgmSourceIterator, 0];
                 IntroSource.clip = _AudioClips[intro];
                 IntroSource.volume = 0.0f;
@@ -407,7 +444,7 @@ namespace AbyssLibU
         public void PlaySE(string path, float volume = 1.0f)
         {
             //読み込み
-            Load(path);
+            EnsureLoaded(path);
             foreach (AudioSource seSource in _seSourceList)
             {
                 if (!seSource.isPlaying)

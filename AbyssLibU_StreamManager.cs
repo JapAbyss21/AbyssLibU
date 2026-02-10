@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
+using UnityEngine;
 
 namespace AbyssLibU
 {
@@ -150,9 +150,9 @@ namespace AbyssLibU
         /// </summary>
         private readonly float Duration;
         /// <summary>
-        /// 内部タイマー
+        /// 経過時間（秒）
         /// </summary>
-        private readonly Stopwatch Timer = new Stopwatch();
+        private float ElapsedSeconds = 0f;
         /// <summary>
         /// ストリームが再生中か
         /// </summary>
@@ -174,7 +174,7 @@ namespace AbyssLibU
         public void Play()
         {
             IsPlaying = true;
-            Timer.Start();
+            ElapsedSeconds = 0f;
         }
         /// <summary>
         /// ストリームの再生を停止します。
@@ -182,7 +182,6 @@ namespace AbyssLibU
         public void Stop()
         {
             IsPlaying = false;
-            Timer.Stop();
         }
         /// <summary>
         /// フレーム毎処理です。
@@ -193,7 +192,8 @@ namespace AbyssLibU
             {
                 return;
             }
-            IsComplete = IsPlaying && Timer.Elapsed.TotalSeconds >= Duration;
+            ElapsedSeconds += Time.deltaTime;
+            IsComplete = IsPlaying && ElapsedSeconds >= Duration;
         }
     }
 
@@ -215,9 +215,9 @@ namespace AbyssLibU
         /// </summary>
         private readonly Dictionary<float, HashSet<IStream>> InsertedStreams = new Dictionary<float, HashSet<IStream>>();
         /// <summary>
-        /// 内部タイマー
+        /// 経過時間（秒）
         /// </summary>
-        private readonly Stopwatch Timer = new Stopwatch();
+        private float ElapsedSeconds = 0f;
         /// <summary>
         /// ストリームが再生中か
         /// </summary>
@@ -303,7 +303,7 @@ namespace AbyssLibU
         /// </summary>
         public void Play()
         {
-            Timer.Start();
+            ElapsedSeconds = 0f;
             IsPlaying = true;
         }
         /// <summary>
@@ -311,7 +311,6 @@ namespace AbyssLibU
         /// </summary>
         public void Stop()
         {
-            Timer.Stop();
             IsPlaying = false;
         }
         /// <summary>
@@ -345,8 +344,10 @@ namespace AbyssLibU
                     IsCompleteOrderingStreams = OrderingStreamsIndex >= OrderingStreams.Count;
                 }
             }
+            //経過時間を更新
+            ElapsedSeconds += Time.deltaTime;
             //Insertされたストリームを実行
-            foreach (var Position in InsertedStreams.Keys.Where((e) => e <= Timer.Elapsed.TotalSeconds))
+            foreach (var Position in InsertedStreams.Keys.Where((e) => e <= ElapsedSeconds))
             {
                 foreach (var Stream in InsertedStreams[Position])
                 {

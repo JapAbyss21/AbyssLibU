@@ -1,14 +1,14 @@
-namespace AbyssLibU
+ï»¿namespace AbyssLibU
 {
     /// <summary>
-    /// ŠO•”QÆ—pƒCƒ“ƒ^[ƒtƒF[ƒXiƒ‹[ƒg—pj
+    /// å¤–éƒ¨å‚ç…§ç”¨ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ï¼ˆãƒ«ãƒ¼ãƒˆç”¨ï¼‰
     /// </summary>
-#pragma warning disable IDE1006 // –½–¼ƒXƒ^ƒCƒ‹
+#pragma warning disable IDE1006 // å‘½åã‚¹ã‚¿ã‚¤ãƒ«
     public interface AbyssLibU_IExternalRefRoot
-#pragma warning restore IDE1006 // –½–¼ƒXƒ^ƒCƒ‹
+#pragma warning restore IDE1006 // å‘½åã‚¹ã‚¿ã‚¤ãƒ«
     {
         /// <summary>
-        /// ŠO•”QÆ‚ğİ’è‚µ‚Ü‚·B
+        /// å¤–éƒ¨å‚ç…§ã‚’è¨­å®šã—ã¾ã™ã€‚
         /// </summary>
         public void SetExternalRef();
     }

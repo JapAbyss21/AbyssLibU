@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace AbyssLibU
 {
@@ -33,9 +32,13 @@ namespace AbyssLibU
         /// </summary>
         private int ImageIdx = 0;
         /// <summary>
-        /// 内部タイマー
+        /// 経過時間（ミリ秒）
         /// </summary>
-        private readonly Stopwatch Timer = new Stopwatch();
+        private float ElapsedMS = 0f;
+        /// <summary>
+        /// タイマーが動作中か
+        /// </summary>
+        private bool IsTimerRunning = false;
         /// <summary>
         /// 描画先
         /// </summary>
@@ -107,7 +110,8 @@ namespace AbyssLibU
             SpriteRenderer.enabled = false;
             IsPlaying = false;
             ImageIdx = 0;
-            Timer.Stop();
+            ElapsedMS = 0f;
+            IsTimerRunning = false;
             return this;
         }
 
@@ -147,7 +151,7 @@ namespace AbyssLibU
             if (!IsSynchronousMode)
             {
                 //再生開始
-                if (ImageIdx == 0 && !Timer.IsRunning)
+                if (ImageIdx == 0 && !IsTimerRunning)
                 {
                     //最初のイメージを設定
                     SpriteRenderer.enabled = true;
@@ -155,12 +159,15 @@ namespace AbyssLibU
                     SpriteRenderer.sprite = textureDataHolder.GetSprite(info, Pivot);
                     float NewScale = Mathf.Min(SpriteSize.x / info.Width, SpriteSize.y / info.Height) * 100;
                     transform.localScale = new Vector3(NewScale, NewScale);
-                    Timer.Start();
+                    ElapsedMS = 0f;
+                    IsTimerRunning = true;
                     return;
                 }
                 //再生中
-                if (Timer.ElapsedMilliseconds >= _Animation.FrameTime)
+                ElapsedMS += Time.deltaTime * 1000f;
+                if (ElapsedMS >= _Animation.FrameTime)
                 {
+                    ElapsedMS -= _Animation.FrameTime;
                     if (++ImageIdx < _Animation.Images.Count)
                     {
                         //次のイメージを設定
@@ -168,7 +175,6 @@ namespace AbyssLibU
                         SpriteRenderer.sprite = textureDataHolder.GetSprite(info, Pivot);
                         float NewScale = Mathf.Min(SpriteSize.x / info.Width, SpriteSize.y / info.Height) * 100;
                         transform.localScale = new Vector3(NewScale, NewScale);
-                        Timer.Restart();
                     }
                     else
                     {
@@ -183,7 +189,6 @@ namespace AbyssLibU
                                 SpriteRenderer.sprite = textureDataHolder.GetSprite(info, Pivot);
                                 float NewScale = Mathf.Min(SpriteSize.x / info.Width, SpriteSize.y / info.Height) * 100;
                                 transform.localScale = new Vector3(NewScale, NewScale);
-                                Timer.Restart();
                             }
                         }
                         else

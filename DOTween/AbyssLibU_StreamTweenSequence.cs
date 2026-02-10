@@ -14,11 +14,11 @@ namespace AbyssLibU
         /// <summary>
         /// ストリームが再生中か
         /// </summary>
-        public bool IsPlaying { get; set; } = false;
+        public bool IsPlaying { get; private set; } = false;
         /// <summary>
         /// ストリームが再生完了か
         /// </summary>
-        public bool IsComplete { get; set; } = false;
+        public bool IsComplete { get; private set; } = false;
 
         /// <summary>
         /// ストリームを再生します。

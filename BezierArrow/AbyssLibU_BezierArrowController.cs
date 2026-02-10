@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 using DG.Tweening;
 
 namespace AbyssLibU
@@ -91,7 +92,7 @@ namespace AbyssLibU
         /// <summary>
         /// プレハブIDとプールのマッピング
         /// </summary>
-        private Dictionary<int, GameObjectPool> _Pools = new Dictionary<int, GameObjectPool>();
+        private Dictionary<int, ObjectPool<GameObject>> _Pools = new Dictionary<int, ObjectPool<GameObject>>();
         /// <summary>
         /// プレハブIDとプレハブのマッピング
         /// </summary>
@@ -171,18 +172,18 @@ namespace AbyssLibU
                 return;
             }
             int TargetPrefabID = TypeData.PrefabID;
-            if (!_Pools.TryGetValue(TargetPrefabID, out GameObjectPool Pool))
+            if (!_Pools.TryGetValue(TargetPrefabID, out ObjectPool<GameObject> Pool))
             {
                 Debug.LogError($"[AbyssLibU_BezierArrowController] Prefab ID {TargetPrefabID} is not registered.");
                 return;
             }
-            GameObject ArrowObj = Pool.GetObject();
+            GameObject ArrowObj = Pool.Get();
             ArrowObj.transform.SetParent(_ArrowParent != null ? _ArrowParent : transform);
             AbyssLibU_BezierArrow Arrow = ArrowObj.GetComponent<AbyssLibU_BezierArrow>();
             if (Arrow == null)
             {
                 Debug.LogError($"[AbyssLibU_BezierArrowController] Prefab ID {TargetPrefabID} does not have BezierArrow component.");
-                ArrowObj.SetActive(false);
+                Pool.Release(ArrowObj);
                 return;
             }
             Arrow.Init(Source, Destination, SourceEdge, DestinationEdge, TypeData.Curvature, TypeData.LineColor, TypeData.LineWidth ?? -1f);
@@ -300,8 +301,13 @@ namespace AbyssLibU
         private void RegisterPrefabInternal(int ID, GameObject Prefab)
         {
             _Prefabs.Add(ID, Prefab);
-            GameObjectPool Pool = new GameObjectPool();
-            Pool.CreatePool(Prefab, _InitialPoolSize);
+            ObjectPool<GameObject> Pool = new ObjectPool<GameObject>(
+                createFunc: () => { GameObject o = Instantiate(Prefab); o.SetActive(false); return o; },
+                actionOnGet: e => e.SetActive(true),
+                actionOnRelease: e => e.SetActive(false),
+                actionOnDestroy: e => Destroy(e),
+                collectionCheck: false,
+                defaultCapacity: _InitialPoolSize);
             _Pools.Add(ID, Pool);
         }
         /// <summary>
@@ -360,7 +366,7 @@ namespace AbyssLibU
             foreach (ArrowInstance Instance in Instances)
             {
                 Instance.Arrow.Hide();
-                Instance.ArrowObject.SetActive(false);
+                _Pools[Instance.PrefabID].Release(Instance.ArrowObject);
             }
             Instances.Clear();
             _ArrowSets.Remove(SetName);
@@ -377,7 +383,7 @@ namespace AbyssLibU
             }
             foreach (ArrowInstance Instance in Instances)
             {
-                Instance.ArrowObject.SetActive(false);
+                _Pools[Instance.PrefabID].Release(Instance.ArrowObject);
             }
             Instances.Clear();
             _ArrowSets.Remove(SetName);

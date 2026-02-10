@@ -392,11 +392,24 @@ namespace AbyssLibU
             _Arrowhead.gameObject.SetActive(false);
         }
         /// <summary>
+        /// 三角形Spriteのキャッシュ
+        /// </summary>
+        private static Sprite _CachedTriangleSprite;
+        /// <summary>
+        /// ソフトエッジマテリアルのキャッシュ
+        /// </summary>
+        private static Material _CachedSoftEdgeMaterial;
+        /// <summary>
         /// 右向き三角形のSpriteを動的に生成します。
+        /// 生成済みの場合はキャッシュを返します。
         /// </summary>
         /// <returns>三角形のSpriteを返します。</returns>
         private static Sprite CreateTriangleSprite()
         {
+            if (_CachedTriangleSprite != null)
+            {
+                return _CachedTriangleSprite;
+            }
             int Size = 64;
             Texture2D Tex = new Texture2D(Size, Size, TextureFormat.RGBA32, false);
             Color[] Pixels = new Color[Size * Size];
@@ -417,14 +430,20 @@ namespace AbyssLibU
             }
             Tex.SetPixels(Pixels);
             Tex.Apply();
-            return Sprite.Create(Tex, new Rect(0, 0, Size, Size), new Vector2(0.5f, 0.5f), Size);
+            _CachedTriangleSprite = Sprite.Create(Tex, new Rect(0, 0, Size, Size), new Vector2(0.5f, 0.5f), Size);
+            return _CachedTriangleSprite;
         }
         /// <summary>
         /// ソフトエッジのマテリアルを生成します。
+        /// 生成済みの場合はキャッシュを返します。
         /// </summary>
         /// <returns>ソフトエッジのマテリアルを返します。</returns>
         private static Material CreateSoftEdgeMaterial()
         {
+            if (_CachedSoftEdgeMaterial != null)
+            {
+                return _CachedSoftEdgeMaterial;
+            }
             int Width = 1;
             int Height = 16;
             Texture2D Tex = new Texture2D(Width, Height, TextureFormat.RGBA32, false);
@@ -439,9 +458,9 @@ namespace AbyssLibU
             }
             Tex.SetPixels(Pixels);
             Tex.Apply();
-            Material Mat = new Material(Shader.Find("Sprites/Default"));
-            Mat.mainTexture = Tex;
-            return Mat;
+            _CachedSoftEdgeMaterial = new Material(Shader.Find("Sprites/Default"));
+            _CachedSoftEdgeMaterial.mainTexture = Tex;
+            return _CachedSoftEdgeMaterial;
         }
     }
 }
