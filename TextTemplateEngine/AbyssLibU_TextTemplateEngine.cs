@@ -123,10 +123,44 @@ namespace AbyssLibU
         /// <summary>
         /// 対象の文字列に対して、「キー参照 + SmartFormat」による文字列処理を行います。
         /// </summary>
-        /// <param name="Target">対象の文字列を指定します。</param>
-        /// <param name="args">文字列に対する引数を指定します。</param>
+        /// <param name="Text">対象の文字列を指定します。</param>
+        /// <param name="Arg0">引数0を指定します。</param>
         /// <returns>「キー参照 + SmartFormat」による文字列処理を行った文字列を返します。</returns>
 #pragma warning disable IDE1006 // 命名スタイル
+        public static string _FT(string Text, object Arg0) => Format(Text, Arg0);
+        /// <summary>
+        /// 対象の文字列に対して、「キー参照 + SmartFormat」による文字列処理を行います。
+        /// </summary>
+        /// <param name="Text">対象の文字列を指定します。</param>
+        /// <param name="Arg0">引数0を指定します。</param>
+        /// <param name="Arg1">引数1を指定します。</param>
+        /// <returns>「キー参照 + SmartFormat」による文字列処理を行った文字列を返します。</returns>
+        public static string _FT(string Text, object Arg0, object Arg1) => Format(Text, Arg0, Arg1);
+        /// <summary>
+        /// 対象の文字列に対して、「キー参照 + SmartFormat」による文字列処理を行います。
+        /// </summary>
+        /// <param name="Text">対象の文字列を指定します。</param>
+        /// <param name="Arg0">引数0を指定します。</param>
+        /// <param name="Arg1">引数1を指定します。</param>
+        /// <param name="Arg2">引数2を指定します。</param>
+        /// <returns>「キー参照 + SmartFormat」による文字列処理を行った文字列を返します。</returns>
+        public static string _FT(string Text, object Arg0, object Arg1, object Arg2) => Format(Text, Arg0, Arg1, Arg2);
+        /// <summary>
+        /// 対象の文字列に対して、「キー参照 + SmartFormat」による文字列処理を行います。
+        /// </summary>
+        /// <param name="Text">対象の文字列を指定します。</param>
+        /// <param name="Arg0">引数0を指定します。</param>
+        /// <param name="Arg1">引数1を指定します。</param>
+        /// <param name="Arg2">引数2を指定します。</param>
+        /// <param name="Arg3">引数3を指定します。</param>
+        /// <returns>「キー参照 + SmartFormat」による文字列処理を行った文字列を返します。</returns>
+        public static string _FT(string Text, object Arg0, object Arg1, object Arg2, object Arg3) => Format(Text, Arg0, Arg1, Arg2, Arg3);
+        /// <summary>
+        /// 対象の文字列に対して、「キー参照 + SmartFormat」による文字列処理を行います。
+        /// </summary>
+        /// <param name="Text">対象の文字列を指定します。</param>
+        /// <param name="args">文字列に対する引数を指定します。</param>
+        /// <returns>「キー参照 + SmartFormat」による文字列処理を行った文字列を返します。</returns>
         public static string _FT(string Text, params object[] args) => Format(Text, args);
 #pragma warning restore IDE1006 // 命名スタイル
     }
