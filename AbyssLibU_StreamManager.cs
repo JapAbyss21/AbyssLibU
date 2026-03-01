@@ -200,7 +200,7 @@ namespace AbyssLibU
     /// <summary>
     /// 複数のストリームを管理するクラスです。
     /// </summary>
-    public class Streams
+    public class Streams : IStream
     {
         /// <summary>
         /// 順序性のあるストリーム
@@ -300,18 +300,42 @@ namespace AbyssLibU
 
         /// <summary>
         /// ストリームを再生します。
+        /// 再生状態・経過時間・インデックス・完了フラグをリセットして再生を開始します。
         /// </summary>
         public void Play()
         {
             ElapsedSeconds = 0f;
+            OrderingStreamsIndex = 0;
             IsPlaying = true;
+            IsComplete = false;
         }
         /// <summary>
         /// ストリームの再生を停止します。
+        /// 再生中の子ストリームにも停止を伝播します。
         /// </summary>
         public void Stop()
         {
             IsPlaying = false;
+            foreach (var Group in OrderingStreams)
+            {
+                foreach (var Stream in Group)
+                {
+                    if (Stream.IsPlaying)
+                    {
+                        Stream.Stop();
+                    }
+                }
+            }
+            foreach (var Group in InsertedStreams.Values)
+            {
+                foreach (var Stream in Group)
+                {
+                    if (Stream.IsPlaying)
+                    {
+                        Stream.Stop();
+                    }
+                }
+            }
         }
         /// <summary>
         /// フレーム毎処理です。
