@@ -25,9 +25,13 @@ namespace AbyssLibU
         /// </summary>
         public float? LineWidth = null;
         /// <summary>
-        /// 曲率（正で左凸、負で右凸）
+        /// 曲率（値が大きいほど大きく曲がる）
         /// </summary>
         public float Curvature = 0.3f;
+        /// <summary>
+        /// ワールド座標上の凸方向
+        /// </summary>
+        public AbyssLibU_BezierArrowBendDirection BendDirection = AbyssLibU_BezierArrowBendDirection.Up;
         /// <summary>
         /// 消去時に末尾から消すかどうか
         /// </summary>
@@ -186,7 +190,7 @@ namespace AbyssLibU
                 Pool.Release(ArrowObj);
                 return;
             }
-            Arrow.Init(Source, Destination, SourceEdge, DestinationEdge, TypeData.Curvature, TypeData.LineColor, TypeData.LineWidth ?? -1f);
+            Arrow.Init(Source, Destination, SourceEdge, DestinationEdge, TypeData.Curvature, TypeData.BendDirection, TypeData.LineColor, TypeData.LineWidth ?? -1f);
             Arrow.Hide();
             ArrowInstance Instance = new ArrowInstance
             {

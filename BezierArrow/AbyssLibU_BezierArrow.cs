@@ -27,6 +27,29 @@ namespace AbyssLibU
     }
 
     /// <summary>
+    /// ベジェ曲線の凸方向（ワールド座標の絶対軸）を表す列挙体です。
+    /// </summary>
+    public enum AbyssLibU_BezierArrowBendDirection
+    {
+        /// <summary>
+        /// 上方向（+Y）に凸
+        /// </summary>
+        Up = 0,
+        /// <summary>
+        /// 下方向（-Y）に凸
+        /// </summary>
+        Down = 1,
+        /// <summary>
+        /// 左方向（-X）に凸
+        /// </summary>
+        Left = 2,
+        /// <summary>
+        /// 右方向（+X）に凸
+        /// </summary>
+        Right = 3,
+    }
+
+    /// <summary>
     /// 二つのGameObject間にベジェ曲線の矢印を描画するコンポーネントです。
     /// </summary>
     public class AbyssLibU_BezierArrow : MonoBehaviour
@@ -95,10 +118,11 @@ namespace AbyssLibU
         /// <param name="Destination">終点のGameObjectを指定します。</param>
         /// <param name="SourceEdge">始点の辺を指定します。</param>
         /// <param name="DestinationEdge">終点の辺を指定します。</param>
-        /// <param name="Curvature">曲率を指定します。正で左凸、負で右凸です。</param>
+        /// <param name="Curvature">曲率を指定します。値が大きいほど大きく曲がります。</param>
+        /// <param name="BendDirection">ワールド座標上の凸方向を指定します。</param>
         /// <param name="LineColor">線の色を指定します。未指定の場合は既存値を維持します。</param>
         /// <param name="Width">線の太さを指定します。未指定の場合は既存値を維持します。</param>
-        public void Init(GameObject Source, GameObject Destination, AbyssLibU_BezierArrowEdgePoint SourceEdge, AbyssLibU_BezierArrowEdgePoint DestinationEdge, float Curvature, Color? LineColor = null, float Width = -1f)
+        public void Init(GameObject Source, GameObject Destination, AbyssLibU_BezierArrowEdgePoint SourceEdge, AbyssLibU_BezierArrowEdgePoint DestinationEdge, float Curvature, AbyssLibU_BezierArrowBendDirection BendDirection, Color? LineColor = null, float Width = -1f)
         {
             EnsureLineRenderer();
             if (LineColor.HasValue)
@@ -113,7 +137,7 @@ namespace AbyssLibU
             }
             _StartPosition = GetEdgeMidpoint(Source, SourceEdge);
             _EndPosition = GetEdgeMidpoint(Destination, DestinationEdge);
-            _ControlPoint = CalculateControlPoint(_StartPosition, _EndPosition, Curvature);
+            _ControlPoint = CalculateControlPoint(_StartPosition, _EndPosition, Curvature, BendDirection);
             BuildCurvePoints();
             CreateArrowhead();
             _ProgressStart = 0f;
@@ -261,13 +285,21 @@ namespace AbyssLibU
         /// <param name="Start">始点を指定します。</param>
         /// <param name="End">終点を指定します。</param>
         /// <param name="Curvature">曲率を指定します。</param>
+        /// <param name="BendDirection">ワールド座標上の凸方向を指定します。</param>
         /// <returns>制御点のワールド座標を返します。</returns>
-        private static Vector3 CalculateControlPoint(Vector3 Start, Vector3 End, float Curvature)
+        private static Vector3 CalculateControlPoint(Vector3 Start, Vector3 End, float Curvature, AbyssLibU_BezierArrowBendDirection BendDirection)
         {
             Vector3 Midpoint = (Start + End) * 0.5f;
             Vector3 Direction = End - Start;
-            Vector3 Perpendicular = new Vector3(-Direction.y, Direction.x, 0f).normalized;
-            Vector3 Offset = Perpendicular * Curvature * Direction.magnitude;
+            Vector3 BendAxis = BendDirection switch
+            {
+                AbyssLibU_BezierArrowBendDirection.Up    => Vector3.up,
+                AbyssLibU_BezierArrowBendDirection.Down  => Vector3.down,
+                AbyssLibU_BezierArrowBendDirection.Left  => Vector3.left,
+                AbyssLibU_BezierArrowBendDirection.Right => Vector3.right,
+                _ => Vector3.up,
+            };
+            Vector3 Offset = BendAxis * Curvature * Direction.magnitude;
             return Midpoint + Offset;
         }
         /// <summary>
