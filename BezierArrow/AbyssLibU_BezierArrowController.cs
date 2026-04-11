@@ -208,6 +208,100 @@ namespace AbyssLibU
         }
 
         /// <summary>
+        /// 矢印を追加します（ワールド座標直接指定版）。追加時は非表示状態で保持されます。
+        /// </summary>
+        /// <param name="SetName">セット名を指定します。</param>
+        /// <param name="TypeID">矢印タイプIDを指定します。</param>
+        /// <param name="SourcePosition">始点のワールド座標を指定します。</param>
+        /// <param name="DestinationPosition">終点のワールド座標を指定します。</param>
+        public void AddArrow(string SetName, int TypeID, Vector3 SourcePosition, Vector3 DestinationPosition)
+        {
+            if (!_ArrowTypes.TryGetValue(TypeID, out AbyssLibU_ArrowTypeData TypeData))
+            {
+                Debug.LogError($"[AbyssLibU_BezierArrowController] ArrowType ID {TypeID} is not registered.");
+                return;
+            }
+            int TargetPrefabID = TypeData.PrefabID;
+            if (!_Pools.TryGetValue(TargetPrefabID, out ObjectPool<GameObject> Pool))
+            {
+                Debug.LogError($"[AbyssLibU_BezierArrowController] Prefab ID {TargetPrefabID} is not registered.");
+                return;
+            }
+            GameObject ArrowObj = Pool.Get();
+            ArrowObj.transform.SetParent(_ArrowParent != null ? _ArrowParent : transform);
+            AbyssLibU_BezierArrow Arrow = ArrowObj.GetComponent<AbyssLibU_BezierArrow>();
+            if (Arrow == null)
+            {
+                Debug.LogError($"[AbyssLibU_BezierArrowController] Prefab ID {TargetPrefabID} does not have BezierArrow component.");
+                Pool.Release(ArrowObj);
+                return;
+            }
+            Arrow.Init(SourcePosition, DestinationPosition, TypeData.Curvature, TypeData.BendDirection, TypeData.LineColor, TypeData.LineWidth ?? -1f);
+            Arrow.Hide();
+            ArrowInstance Instance = new ArrowInstance
+            {
+                ArrowObject = ArrowObj,
+                Arrow = Arrow,
+                TypeID = TypeID,
+                PrefabID = TargetPrefabID,
+            };
+            if (!_ArrowSets.TryGetValue(SetName, out List<ArrowInstance> Instances))
+            {
+                Instances = new List<ArrowInstance>();
+                _ArrowSets.Add(SetName, Instances);
+            }
+            Instances.Add(Instance);
+        }
+
+        /// <summary>
+        /// 矢印を追加します（Bounds直接指定版）。追加時は非表示状態で保持されます。
+        /// </summary>
+        /// <param name="SetName">セット名を指定します。</param>
+        /// <param name="TypeID">矢印タイプIDを指定します。</param>
+        /// <param name="SourceBounds">始点のBoundsを指定します。</param>
+        /// <param name="DestinationBounds">終点のBoundsを指定します。</param>
+        /// <param name="SourceEdge">始点の辺を指定します。</param>
+        /// <param name="DestinationEdge">終点の辺を指定します。</param>
+        public void AddArrow(string SetName, int TypeID, Bounds SourceBounds, Bounds DestinationBounds, AbyssLibU_BezierArrowEdgePoint SourceEdge, AbyssLibU_BezierArrowEdgePoint DestinationEdge)
+        {
+            if (!_ArrowTypes.TryGetValue(TypeID, out AbyssLibU_ArrowTypeData TypeData))
+            {
+                Debug.LogError($"[AbyssLibU_BezierArrowController] ArrowType ID {TypeID} is not registered.");
+                return;
+            }
+            int TargetPrefabID = TypeData.PrefabID;
+            if (!_Pools.TryGetValue(TargetPrefabID, out ObjectPool<GameObject> Pool))
+            {
+                Debug.LogError($"[AbyssLibU_BezierArrowController] Prefab ID {TargetPrefabID} is not registered.");
+                return;
+            }
+            GameObject ArrowObj = Pool.Get();
+            ArrowObj.transform.SetParent(_ArrowParent != null ? _ArrowParent : transform);
+            AbyssLibU_BezierArrow Arrow = ArrowObj.GetComponent<AbyssLibU_BezierArrow>();
+            if (Arrow == null)
+            {
+                Debug.LogError($"[AbyssLibU_BezierArrowController] Prefab ID {TargetPrefabID} does not have BezierArrow component.");
+                Pool.Release(ArrowObj);
+                return;
+            }
+            Arrow.Init(SourceBounds, DestinationBounds, SourceEdge, DestinationEdge, TypeData.Curvature, TypeData.BendDirection, TypeData.LineColor, TypeData.LineWidth ?? -1f);
+            Arrow.Hide();
+            ArrowInstance Instance = new ArrowInstance
+            {
+                ArrowObject = ArrowObj,
+                Arrow = Arrow,
+                TypeID = TypeID,
+                PrefabID = TargetPrefabID,
+            };
+            if (!_ArrowSets.TryGetValue(SetName, out List<ArrowInstance> Instances))
+            {
+                Instances = new List<ArrowInstance>();
+                _ArrowSets.Add(SetName, Instances);
+            }
+            Instances.Add(Instance);
+        }
+
+        /// <summary>
         /// 全セットの矢印を一括表示するTweenを取得します。
         /// </summary>
         /// <param name="Duration">アニメーション時間（秒）を指定します。</param>

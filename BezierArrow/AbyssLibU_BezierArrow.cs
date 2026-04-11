@@ -146,6 +146,71 @@ namespace AbyssLibU
         }
 
         /// <summary>
+        /// ベジェ曲線の矢印を初期化します（Bounds指定版）。
+        /// </summary>
+        /// <param name="SourceBounds">始点のBoundsを指定します。</param>
+        /// <param name="DestinationBounds">終点のBoundsを指定します。</param>
+        /// <param name="SourceEdge">始点の辺を指定します。</param>
+        /// <param name="DestinationEdge">終点の辺を指定します。</param>
+        /// <param name="Curvature">曲率を指定します。値が大きいほど大きく曲がります。</param>
+        /// <param name="BendDirection">ワールド座標上の凸方向を指定します。</param>
+        /// <param name="LineColor">線の色を指定します。未指定の場合は既存値を維持します。</param>
+        /// <param name="Width">線の太さを指定します。未指定の場合は既存値を維持します。</param>
+        public void Init(Bounds SourceBounds, Bounds DestinationBounds, AbyssLibU_BezierArrowEdgePoint SourceEdge, AbyssLibU_BezierArrowEdgePoint DestinationEdge, float Curvature, AbyssLibU_BezierArrowBendDirection BendDirection, Color? LineColor = null, float Width = -1f)
+        {
+            EnsureLineRenderer();
+            if (LineColor.HasValue)
+            {
+                _LineRenderer.startColor = LineColor.Value;
+                _LineRenderer.endColor = LineColor.Value;
+            }
+            if (Width >= 0f)
+            {
+                _LineRenderer.startWidth = Width;
+                _LineRenderer.endWidth = Width;
+            }
+            _StartPosition = GetEdgeMidpointFromBounds(SourceBounds, SourceEdge);
+            _EndPosition = GetEdgeMidpointFromBounds(DestinationBounds, DestinationEdge);
+            _ControlPoint = CalculateControlPoint(_StartPosition, _EndPosition, Curvature, BendDirection);
+            BuildCurvePoints();
+            CreateArrowhead();
+            _ProgressStart = 0f;
+            _ProgressEnd = 0f;
+            ApplyProgress();
+        }
+        /// <summary>
+        /// ベジェ曲線の矢印を初期化します（ワールド座標直接指定版）。
+        /// </summary>
+        /// <param name="SourcePosition">始点のワールド座標を指定します。</param>
+        /// <param name="DestinationPosition">終点のワールド座標を指定します。</param>
+        /// <param name="Curvature">曲率を指定します。値が大きいほど大きく曲がります。</param>
+        /// <param name="BendDirection">ワールド座標上の凸方向を指定します。</param>
+        /// <param name="LineColor">線の色を指定します。未指定の場合は既存値を維持します。</param>
+        /// <param name="Width">線の太さを指定します。未指定の場合は既存値を維持します。</param>
+        public void Init(Vector3 SourcePosition, Vector3 DestinationPosition, float Curvature, AbyssLibU_BezierArrowBendDirection BendDirection, Color? LineColor = null, float Width = -1f)
+        {
+            EnsureLineRenderer();
+            if (LineColor.HasValue)
+            {
+                _LineRenderer.startColor = LineColor.Value;
+                _LineRenderer.endColor = LineColor.Value;
+            }
+            if (Width >= 0f)
+            {
+                _LineRenderer.startWidth = Width;
+                _LineRenderer.endWidth = Width;
+            }
+            _StartPosition = SourcePosition;
+            _EndPosition = DestinationPosition;
+            _ControlPoint = CalculateControlPoint(_StartPosition, _EndPosition, Curvature, BendDirection);
+            BuildCurvePoints();
+            CreateArrowhead();
+            _ProgressStart = 0f;
+            _ProgressEnd = 0f;
+            ApplyProgress();
+        }
+
+        /// <summary>
         /// 矢印を即時表示します。
         /// </summary>
         public void Show()
@@ -267,18 +332,24 @@ namespace AbyssLibU
             Renderer Rend = Target.GetComponent<Renderer>();
             if (Rend != null)
             {
-                Bounds B = Rend.bounds;
-                return Edge switch
-                {
-                    AbyssLibU_BezierArrowEdgePoint.Top => B.center + new Vector3(0f, B.extents.y, 0f),
-                    AbyssLibU_BezierArrowEdgePoint.Bottom => B.center - new Vector3(0f, B.extents.y, 0f),
-                    AbyssLibU_BezierArrowEdgePoint.Left => B.center - new Vector3(B.extents.x, 0f, 0f),
-                    AbyssLibU_BezierArrowEdgePoint.Right => B.center + new Vector3(B.extents.x, 0f, 0f),
-                    _ => B.center,
-                };
+                return GetEdgeMidpointFromBounds(Rend.bounds, Edge);
             }
             return Target.transform.position;
         }
+        /// <summary>
+        /// Boundsの辺の中点をワールド座標で取得します。
+        /// </summary>
+        /// <param name="B">対象のBoundsを指定します。</param>
+        /// <param name="Edge">辺を指定します。</param>
+        /// <returns>辺の中点のワールド座標を返します。</returns>
+        private static Vector3 GetEdgeMidpointFromBounds(Bounds B, AbyssLibU_BezierArrowEdgePoint Edge) => Edge switch
+        {
+            AbyssLibU_BezierArrowEdgePoint.Top => B.center + new Vector3(0f, B.extents.y, 0f),
+            AbyssLibU_BezierArrowEdgePoint.Bottom => B.center - new Vector3(0f, B.extents.y, 0f),
+            AbyssLibU_BezierArrowEdgePoint.Left => B.center - new Vector3(B.extents.x, 0f, 0f),
+            AbyssLibU_BezierArrowEdgePoint.Right => B.center + new Vector3(B.extents.x, 0f, 0f),
+            _ => B.center,
+        };
         /// <summary>
         /// ベジェ曲線の制御点を算出します。
         /// </summary>
