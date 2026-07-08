@@ -237,16 +237,19 @@ namespace AbyssLibU
         /// <returns>矢印の描画アニメーションのTweenを返します。</returns>
         public Tween GetTweenDrawArrow(float Duration)
         {
-            _ProgressStart = 0f;
-            _ProgressEnd = 0f;
-            ApplyProgress();
-            Sequence Seq = DOTween.Sequence();
-            Seq.Join(DOTween.To(
+            Sequence Result = DOTween.Sequence();
+            Result.AppendCallback(() =>
+            {
+                _ProgressStart = 0f;
+                _ProgressEnd = 0f;
+                ApplyProgress();
+            });
+            Result.Append(DOTween.To(
                 () => _ProgressEnd,
                 e => { _ProgressEnd = e; ApplyProgress(); },
                 1f, Duration
             ).SetEase(Ease.OutQuad));
-            return Seq;
+            return Result;
         }
 
         /// <summary>
